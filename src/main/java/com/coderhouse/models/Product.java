@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Products")
+@Table(name = "products")
 public class Product {
 
 	// Attributes
@@ -38,6 +38,8 @@ public class Product {
 
 	public Product(String name, String description, String code, int stock, double price) {
 		super();
+		validatePrice(price);
+		validateStock(stock);
 		this.name = name;
 		this.description = description;
 		this.code = code;
