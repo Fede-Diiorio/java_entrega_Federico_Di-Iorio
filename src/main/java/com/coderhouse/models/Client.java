@@ -20,15 +20,15 @@ public class Client {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(name = "c_name", nullable = false)
+	@Column(nullable = false)
 	private String name;
 
-	@Column(name = "c_lastname", nullable = false)
+	@Column(nullable = false)
 	private String lastname;
 
-	@Column(name = "c_docnumber", nullable = false, unique = true)
+	@Column(nullable = false, unique = true)
 	private String docnumber;
-	
+
 	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
 	private List<Invoice> invoices;
 

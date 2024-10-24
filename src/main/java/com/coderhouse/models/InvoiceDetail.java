@@ -14,25 +14,22 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
-//@Entity
+@Entity
 @Table(name = "invoice_details")
 public class InvoiceDetail {
 
-	//Attributes
+	// Attributes
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "invoice_detail_id")
 	private long id;
-	
+
+	@Column(nullable = false)
 	private int amoun;
-	
+
+	@Column(nullable = false)
 	private double price;
-	
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(
-			name = "products"
-			)
-	private List<Product> product;
-	
+
 	public InvoiceDetail() {
 		super();
 	}
@@ -72,6 +69,5 @@ public class InvoiceDetail {
 	public String toString() {
 		return "InvoiceDetail [id=" + id + ", amoun=" + amoun + ", price=" + price + "]";
 	}
-	
-	
+
 }

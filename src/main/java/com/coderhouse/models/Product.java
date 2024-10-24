@@ -23,19 +23,19 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(name = "p_name", nullable = false)
+	@Column(nullable = false)
 	private String name;
 
-	@Column(name = "p_description", nullable = false)
+	@Column(nullable = false)
 	private String description;
 
-	@Column(name = "p_code", unique = true, nullable = false)
+	@Column(unique = true, nullable = false)
 	private String code;
 
-	@Column(name = "p_stock", nullable = false)
+	@Column(nullable = false)
 	private int stock;
 
-	@Column(name = "p_price", nullable = false)
+	@Column(nullable = false)
 	private double price;
 
 	@ManyToMany(fetch = FetchType.EAGER)
