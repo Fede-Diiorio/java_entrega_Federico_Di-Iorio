@@ -1,17 +1,21 @@
 package com.coderhouse.models;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "invoice")
+@Table(name = "invoices")
 public class Invoice {
 
 	// Attributes
@@ -20,12 +24,15 @@ public class Invoice {
 	private long id;
 
 	@ManyToOne
-	 @JoinColumn(name = "client_id", referencedColumnName = "client_id")
+	@JoinColumn(name = "client_id", referencedColumnName = "id")
 	private Client client;
 
 	private double total;
 
 	private LocalDateTime created_at = LocalDateTime.now();
+
+	@ManyToMany(mappedBy = "invoices", fetch = FetchType.EAGER)
+	private List<Product> products = new ArrayList<>();
 
 	// Constructor
 	public Invoice() {

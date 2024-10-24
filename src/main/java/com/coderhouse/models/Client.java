@@ -2,6 +2,7 @@ package com.coderhouse.models;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,7 +18,6 @@ public class Client {
 	// Attributes
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "client_id")
 	private long id;
 
 	@Column(name = "c_name", nullable = false)
@@ -29,7 +29,7 @@ public class Client {
 	@Column(name = "c_docnumber", nullable = false, unique = true)
 	private String docnumber;
 	
-	@OneToMany(mappedBy = "client")
+	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
 	private List<Invoice> invoices;
 
 	// Constructor
