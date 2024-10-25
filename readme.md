@@ -1,6 +1,6 @@
 # Proyecto Java con Spring Boot
 
-Este es un proyecto simple desarrollado en Java con Spring Boot como parte del curso de [nombre del curso o institución]. La aplicación está configurada para generar automáticamente tablas en una base de datos MySQL al ejecutarse.
+Este es un proyecto simple desarrollado en Java con Spring Boot como parte del curso de Programación con Java de la platataforma Coderhouse. La aplicación está configurada para generar automáticamente tablas en una base de datos MySQL al ejecutarse.
 
 ## Tecnologías utilizadas
 - **Java** - [JavaSE-21]
