@@ -23,13 +23,10 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(nullable = false)
-	private String name;
-
-	@Column(nullable = false)
+	@Column(nullable = false, length = 150)
 	private String description;
 
-	@Column(unique = true, nullable = false)
+	@Column(unique = true, nullable = false, length = 50)
 	private String code;
 
 	@Column(nullable = false)
@@ -51,7 +48,6 @@ public class Product {
 		super();
 		validatePrice(price);
 		validateStock(stock);
-		this.name = name;
 		this.description = description;
 		this.code = code;
 		this.stock = stock;
@@ -65,14 +61,6 @@ public class Product {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getDescription() {
@@ -125,8 +113,8 @@ public class Product {
 	// ToString
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", name=" + name + ", description=" + description + ", code=" + code + ", stock="
-				+ stock + ", price=" + price + "]";
+		return "Product [id=" + id + ", description=" + description + ", code=" + code + ", stock=" + stock + ", price="
+				+ price + "]";
 	}
 
 }

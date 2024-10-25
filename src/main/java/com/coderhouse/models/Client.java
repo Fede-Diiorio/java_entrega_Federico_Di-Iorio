@@ -20,13 +20,13 @@ public class Client {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 75)
 	private String name;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 75)
 	private String lastname;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false, unique = true, length = 11)
 	private String docnumber;
 
 	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
