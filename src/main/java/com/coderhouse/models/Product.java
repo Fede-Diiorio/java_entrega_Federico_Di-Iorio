@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -22,6 +23,12 @@ public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+
+	@Column(nullable = false, length = 50)
+	private String name;
+
+	@Column(length = 200)
+	private String image;
 
 	@Column(nullable = false, length = 150)
 	private String description;
@@ -34,6 +41,10 @@ public class Product {
 
 	@Column(nullable = false)
 	private double price;
+	
+	@ManyToOne
+	@JoinColumn(name = "category", nullable = false)
+	private ProductCategory category;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "invoice_details", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "invoice_id"))
@@ -48,6 +59,7 @@ public class Product {
 		super();
 		validatePrice(price);
 		validateStock(stock);
+		this.name = name;
 		this.description = description;
 		this.code = code;
 		this.stock = stock;
@@ -59,8 +71,20 @@ public class Product {
 		return id;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	public String getDescription() {
