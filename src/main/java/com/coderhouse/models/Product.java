@@ -30,7 +30,7 @@ public class Product {
 	@Column(length = 200)
 	private String image;
 
-	@Column(nullable = false, length = 150)
+	@Column(nullable = false, length = 250)
 	private String description;
 
 	@Column(unique = true, nullable = false, length = 50)
@@ -64,6 +64,22 @@ public class Product {
 		this.code = code;
 		this.stock = stock;
 		this.price = price;
+	}
+	
+	
+
+	public Product(String name, String image, String description, String code, int stock, double price,
+			ProductCategory category) {
+		super();
+		validatePrice(price);
+		validateStock(stock);
+		this.name = name;
+		this.image = image;
+		this.description = description;
+		this.code = code;
+		this.stock = stock;
+		this.price = price;
+		this.category = category;
 	}
 
 	// GET y SET
