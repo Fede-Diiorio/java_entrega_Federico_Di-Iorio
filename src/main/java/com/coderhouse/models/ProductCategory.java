@@ -24,6 +24,9 @@ public class ProductCategory {
 	@Column(nullable = false, length = 30)
 	private String name;
 
+	@Column(nullable = false, length = 20)
+	private String slug;
+
 	@OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
 	Set<Product> products = new HashSet<Product>();
 
@@ -37,10 +40,10 @@ public class ProductCategory {
 		this.name = name;
 	}
 
-	public ProductCategory(String name, Set<Product> products) {
+	public ProductCategory(String name, String slug) {
 		super();
 		this.name = name;
-		this.products = products;
+		this.slug = slug;
 	}
 
 	// GET y SET
@@ -50,6 +53,14 @@ public class ProductCategory {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getSlug() {
+		return slug;
+	}
+
+	public void setSlug(String slug) {
+		this.slug = slug;
 	}
 
 	public Set<Product> getProducts() {
@@ -66,7 +77,7 @@ public class ProductCategory {
 
 	@Override
 	public String toString() {
-		return "ProductCategory [id=" + id + ", name=" + name + ", products=" + products + "]";
+		return "ProductCategory [id=" + id + ", name=" + name + ", slug=" + slug + ", products=" + products + "]";
 	}
 
 }
