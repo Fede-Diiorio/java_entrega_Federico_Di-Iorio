@@ -3,6 +3,8 @@ package com.coderhouse.models;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -28,6 +30,7 @@ public class ProductCategory {
 	private String slug;
 
 	@OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+	@JsonIgnore
 	Set<Product> products = new HashSet<Product>();
 
 	// Constructors

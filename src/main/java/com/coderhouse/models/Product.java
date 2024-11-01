@@ -41,7 +41,7 @@ public class Product {
 
 	@Column(nullable = false)
 	private double price;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "category", nullable = false)
 	private ProductCategory category;
@@ -65,8 +65,6 @@ public class Product {
 		this.stock = stock;
 		this.price = price;
 	}
-	
-	
 
 	public Product(String name, String image, String description, String code, int stock, double price,
 			ProductCategory category) {
