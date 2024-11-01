@@ -87,6 +87,14 @@ public class Product {
 		return id;
 	}
 
+	public ProductCategory getCategory() {
+		return category;
+	}
+
+	public void setCategory(ProductCategory category) {
+		this.category = category;
+	}
+
 	public String getName() {
 		return name;
 	}
