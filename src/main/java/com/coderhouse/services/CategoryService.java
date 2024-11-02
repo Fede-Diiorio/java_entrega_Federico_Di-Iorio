@@ -39,7 +39,7 @@ public class CategoryService {
 				.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
 		category.setName(categoryDetails.getName());
 
-		if (categoryDetails.getSlug() != null || !categoryDetails.getSlug().isEmpty()) {
+		if (categoryDetails.getSlug() != null && !categoryDetails.getSlug().isEmpty()) {
 			category.setSlug(categoryDetails.getSlug());
 		}
 
@@ -48,7 +48,7 @@ public class CategoryService {
 
 	public void deleteCategory(Long id) {
 		if (!categoryRepository.existsById(id)) {
-			throw new IllegalArgumentException("Categoria no encontrada.");
+			throw new IllegalArgumentException("Categoria no encontrada");
 		}
 		categoryRepository.deleteById(id);
 	}

@@ -1,10 +1,12 @@
 package com.coderhouse.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,8 +31,8 @@ public class Client {
 	@Column(nullable = false, unique = true, length = 11)
 	private String docnumber;
 
-	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
-	private List<Invoice> invoices;
+	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<Invoice> invoices = new ArrayList<Invoice>();
 
 	// Constructor
 	public Client() {
@@ -47,10 +49,6 @@ public class Client {
 	// GET y SET
 	public long getId() {
 		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	public String getName() {
