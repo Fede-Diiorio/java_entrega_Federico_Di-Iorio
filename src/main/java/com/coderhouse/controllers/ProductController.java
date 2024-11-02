@@ -49,12 +49,14 @@ public class ProductController {
 
 	@PostMapping
 	public ResponseEntity<Product> saveProduct(@RequestBody ProductDTO product) {
-		try {
-			Product createdProduct = productService.saveProduct(product);
-			return ResponseEntity.ok(createdProduct);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
+	    try {
+	        Product createdProduct = productService.saveProduct(product);
+	        return ResponseEntity.ok(createdProduct);
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
 	}
 
 	@PutMapping("{id}")

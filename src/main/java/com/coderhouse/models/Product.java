@@ -44,7 +44,7 @@ public class Product {
 
 	@ManyToOne
 	@JoinColumn(name = "category", nullable = false)
-	private ProductCategory category;
+	private Category category;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "invoice_details", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "invoice_id"))
@@ -67,7 +67,7 @@ public class Product {
 	}
 
 	public Product(String name, String image, String description, String code, int stock, double price,
-			ProductCategory category) {
+			Category category) {
 		super();
 		validatePrice(price);
 		validateStock(stock);
@@ -85,11 +85,11 @@ public class Product {
 		return id;
 	}
 
-	public ProductCategory getCategory() {
+	public Category getCategory() {
 		return category;
 	}
 
-	public void setCategory(ProductCategory category) {
+	public void setCategory(Category category) {
 		this.category = category;
 	}
 

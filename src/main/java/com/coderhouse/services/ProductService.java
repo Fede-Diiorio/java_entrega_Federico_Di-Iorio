@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.coderhouse.dto.ProductDTO;
 import com.coderhouse.models.Product;
-import com.coderhouse.models.ProductCategory;
+import com.coderhouse.models.Category;
 import com.coderhouse.repositories.CategoryRepository;
 import com.coderhouse.repositories.ProductRepository;
 
@@ -33,7 +33,7 @@ public class ProductService {
 
 	@Transactional
 	public Product saveProduct(ProductDTO productDTO) {
-		ProductCategory category = categoryRepository.findById(productDTO.getCategory())
+		Category category = categoryRepository.findById(productDTO.getCategory())
 				.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
 
 		Product product = new Product();
@@ -73,7 +73,7 @@ public class ProductService {
 		}
 
 		if (productDetails.getCategory() != null) {
-			ProductCategory category = categoryRepository.findById(productDetails.getCategory())
+			Category category = categoryRepository.findById(productDetails.getCategory())
 					.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
 			product.setCategory(category);
 		}

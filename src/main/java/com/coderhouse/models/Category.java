@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "categories")
-public class ProductCategory {
+public class Category {
 
 	// Attributes
 	@Id
@@ -34,16 +34,16 @@ public class ProductCategory {
 	Set<Product> products = new HashSet<Product>();
 
 	// Constructors
-	public ProductCategory() {
+	public Category() {
 		super();
 	}
 
-	public ProductCategory(String name) {
+	public Category(String name) {
 		super();
 		this.name = name;
 	}
 
-	public ProductCategory(String name, String slug) {
+	public Category(String name, String slug) {
 		super();
 		this.name = name;
 		this.slug = slug;
