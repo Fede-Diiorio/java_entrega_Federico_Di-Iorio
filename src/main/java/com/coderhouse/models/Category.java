@@ -23,10 +23,10 @@ public class Category {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(nullable = false, length = 30)
+	@Column(nullable = false, length = 50)
 	private String name;
 
-	@Column(nullable = false, length = 20)
+	@Column(length = 30)
 	private String slug;
 
 	@OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
@@ -46,7 +46,7 @@ public class Category {
 	public Category(String name, String slug) {
 		super();
 		this.name = name;
-		this.slug = slug;
+		this.slug = validateSlug(slug);
 	}
 
 	// GET y SET
@@ -63,24 +63,25 @@ public class Category {
 	}
 
 	public void setSlug(String slug) {
-		this.slug = slug;
-	}
-
-	public Set<Product> getProducts() {
-		return products;
-	}
-
-	public void setProducts(Set<Product> products) {
-		this.products = products;
+		this.slug = validateSlug(slug);
 	}
 
 	public long getId() {
 		return id;
 	}
 
+	// Methods
+
+	private String validateSlug(String slug) {
+		if (slug == null) {
+			return "sin-categoria";
+		}
+		return slug.toLowerCase().replace(" ", "-");
+	}
+
 	@Override
 	public String toString() {
-		return "ProductCategory [id=" + id + ", name=" + name + ", slug=" + slug + ", products=" + products + "]";
+		return "Category [id=" + id + ", name=" + name + ", slug=" + slug + "]";
 	}
 
 }
