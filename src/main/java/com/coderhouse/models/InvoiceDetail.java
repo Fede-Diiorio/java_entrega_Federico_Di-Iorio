@@ -1,10 +1,14 @@
 package com.coderhouse.models;
 
+
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,6 +27,8 @@ public class InvoiceDetail {
 	@Column(nullable = false)
 	private double price;
 
+	
+	//Constructors 
 	public InvoiceDetail() {
 		super();
 	}
@@ -36,10 +42,6 @@ public class InvoiceDetail {
 
 	public long getId() {
 		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	public int getAmoun() {
