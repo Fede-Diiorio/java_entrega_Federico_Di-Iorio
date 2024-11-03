@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.coderhouse.dto.InvoiceDTO;
 import com.coderhouse.dto.InvoiceDetailDTO;
 import com.coderhouse.models.Invoice;
 import com.coderhouse.models.InvoiceDetail;
@@ -46,6 +45,10 @@ public class InvoiceDetailsService {
 		
 		invoiceDetail.setAmoun(invoiceDetailDTO.getAmoun());
 		invoiceDetail.setPrice(product.getPrice());
+		invoiceDetail.setProduct(product);
+		invoiceDetail.setInvoice(invoice);
+		
+		return invoiceDetailsRepository.save(invoiceDetail);
 	}
 	
 }

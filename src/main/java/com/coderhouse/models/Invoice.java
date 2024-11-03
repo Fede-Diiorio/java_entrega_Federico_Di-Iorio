@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -13,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -34,7 +38,12 @@ public class Invoice {
 	private LocalDateTime created_at = LocalDateTime.now();
 
 	@ManyToMany(mappedBy = "invoices", fetch = FetchType.EAGER)
+	@JsonIgnore
 	private List<Product> products = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonIgnore
+	private List<InvoiceDetail> invoiceDetails = new ArrayList<InvoiceDetail>();
 
 	// Constructor
 	public Invoice() {

@@ -3,6 +3,9 @@ package com.coderhouse.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -13,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -50,6 +54,10 @@ public class Product {
 	@JoinTable(name = "invoice_details", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "invoice_id"))
 	private List<Invoice> invoices = new ArrayList<Invoice>();
 
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonIgnore
+	private List<InvoiceDetail> invoiceDetails = new ArrayList<>();
+
 	// Constructor
 	public Product() {
 		super();
@@ -67,10 +75,8 @@ public class Product {
 	}
 
 	public Product(String name, String image, String description, String code, int stock, double price,
-			Category category) {
+			Category category, List<Invoice> invoices, List<InvoiceDetail> invoiceDetails) {
 		super();
-		validatePrice(price);
-		validateStock(stock);
 		this.name = name;
 		this.image = image;
 		this.description = description;
@@ -78,11 +84,29 @@ public class Product {
 		this.stock = stock;
 		this.price = price;
 		this.category = category;
+		this.invoices = invoices;
+		this.invoiceDetails = invoiceDetails;
 	}
 
 	// GET y SET
 	public long getId() {
 		return id;
+	}
+
+	public List<Invoice> getInvoices() {
+		return invoices;
+	}
+
+	public void setInvoices(List<Invoice> invoices) {
+		this.invoices = invoices;
+	}
+
+	public List<InvoiceDetail> getInvoiceDetails() {
+		return invoiceDetails;
+	}
+
+	public void setInvoiceDetails(List<InvoiceDetail> invoiceDetails) {
+		this.invoiceDetails = invoiceDetails;
 	}
 
 	public Category getCategory() {
