@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -27,6 +28,7 @@ public class Invoice {
 	@JoinColumn(name = "client_id", referencedColumnName = "id")
 	private Client client;
 
+	@Column
 	private double total;
 
 	private LocalDateTime created_at = LocalDateTime.now();
