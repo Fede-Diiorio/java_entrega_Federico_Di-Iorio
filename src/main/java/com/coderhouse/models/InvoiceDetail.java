@@ -20,7 +20,7 @@ public class InvoiceDetail {
 	private long id;
 
 	@Column(nullable = false)
-	private int amoun;
+	private int quantity;
 
 	@Column(nullable = false)
 	private double price;
@@ -38,10 +38,10 @@ public class InvoiceDetail {
 		super();
 	}
 
-	public InvoiceDetail(long id, int amoun, double price) {
+	public InvoiceDetail(long id, int quantity, double price) {
 		super();
 		this.id = id;
-		this.amoun = amoun;
+		this.quantity = quantity;
 		this.price = price;
 	}
 
@@ -65,12 +65,12 @@ public class InvoiceDetail {
 		this.product = product;
 	}
 
-	public int getAmoun() {
-		return amoun;
+	public int getQuantity() {
+		return quantity;
 	}
 
-	public void setAmoun(int amoun) {
-		this.amoun = amoun;
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
 	public double getPrice() {
@@ -83,7 +83,7 @@ public class InvoiceDetail {
 
 	@Override
 	public String toString() {
-		return "InvoiceDetail [id=" + id + ", amoun=" + amoun + ", price=" + price + "]";
+		return "InvoiceDetail [id=" + id + ", quantity=" + quantity + ", price=" + price + "]";
 	}
 
 }

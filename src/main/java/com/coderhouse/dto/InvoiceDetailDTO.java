@@ -2,16 +2,16 @@ package com.coderhouse.dto;
 
 public class InvoiceDetailDTO {
 
-	private int amoun;
+	private int quantity;
 	private double price;
 	private Long product_id;
 	private Long invoice_id;
 	
-	public int getAmoun() {
-		return amoun;
+	public int getQuantity() {
+		return quantity;
 	}
-	public void setAmoun(int amoun) {
-		this.amoun = amoun;
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 	public double getPrice() {
 		return price;

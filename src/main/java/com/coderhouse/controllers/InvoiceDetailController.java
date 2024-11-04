@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,6 +52,19 @@ public class InvoiceDetailController {
 	public ResponseEntity<InvoiceDetail> saveInvoiceDetails(@RequestBody InvoiceDetailDTO details) {
 		try {
 			InvoiceDetail invoiceDetails = invoiceDetailsService.saveInvoicesDetails(details);
+			return ResponseEntity.ok(invoiceDetails);
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<InvoiceDetail> updateInvoiceDetails(@PathVariable Long id,
+			@RequestBody InvoiceDetail details) {
+		try {
+			InvoiceDetail invoiceDetails = invoiceDetailsService.updateInvoicesDetails(id, details);
 			return ResponseEntity.ok(invoiceDetails);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
