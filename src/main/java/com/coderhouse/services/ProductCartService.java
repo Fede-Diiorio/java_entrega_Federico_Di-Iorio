@@ -47,7 +47,6 @@ public class ProductCartService {
 		ProductCart invoiceDetail = new ProductCart();
 
 		invoiceDetail.setQuantity(invoiceDetailDTO.getQuantity());
-		invoiceDetail.setPrice(product.getPrice());
 		invoiceDetail.setProduct(product);
 		invoiceDetail.setTicket(invoice);
 
