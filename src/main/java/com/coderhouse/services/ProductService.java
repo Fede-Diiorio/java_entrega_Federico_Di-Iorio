@@ -28,7 +28,7 @@ public class ProductService {
 
 	public Product findById(Long id) {
 		return productRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado."));
+				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
 	}
 
 	@Transactional

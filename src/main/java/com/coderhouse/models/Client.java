@@ -27,7 +27,7 @@ public class Client {
 
 	@Column(nullable = false, unique = true, length = 11)
 	private String docnumber;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "cart_id", nullable = false)
 	private Cart cart;
@@ -75,6 +75,14 @@ public class Client {
 
 	public void setDocnumber(String docnumber) {
 		this.docnumber = docnumber;
+	}
+
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
 	}
 
 	@Override
