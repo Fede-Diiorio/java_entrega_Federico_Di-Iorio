@@ -1,6 +1,6 @@
 package com.coderhouse.dto;
 
-public class InvoiceDetailDTO {
+public class ProductCartDTO {
 
 	private int quantity;
 	private double price;

@@ -40,7 +40,6 @@ public class ProductService {
 		product.setName(productDTO.getName());
 		product.setImage(productDTO.getImage());
 		product.setDescription(productDTO.getDescription());
-		product.setCode(productDTO.getCode());
 		product.setStock(productDTO.getStock());
 		product.setPrice(productDTO.getPrice());
 		product.setCategory(category);
@@ -66,10 +65,6 @@ public class ProductService {
 
 		if (productDetails.getImage() != null && !productDetails.getImage().isEmpty()) {
 			product.setImage(productDetails.getImage());
-		}
-
-		if (productDetails.getCode() != null && !productDetails.getCode().isEmpty()) {
-			product.setCode(productDetails.getCode());
 		}
 
 		if (productDetails.getCategory() != null) {

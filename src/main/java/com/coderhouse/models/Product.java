@@ -2,6 +2,7 @@ package com.coderhouse.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -13,7 +14,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -38,7 +38,7 @@ public class Product {
 	private String description;
 
 	@Column(unique = true, nullable = false, length = 50)
-	private String code;
+	private String code = UUID.randomUUID().toString().replace("-", "");
 
 	@Column(nullable = false)
 	private int stock;
@@ -50,13 +50,12 @@ public class Product {
 	@JoinColumn(name = "category", nullable = false)
 	private Category category;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "invoice_details", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "invoice_id"))
-	private List<Invoice> invoices = new ArrayList<Invoice>();
-
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JsonIgnore
-	private List<InvoiceDetail> invoiceDetails = new ArrayList<>();
+    @JsonIgnore
+    private List<ProductCart> productCart = new ArrayList<>();
+
+	@ManyToMany
+	private List<Cart> carts = new ArrayList<Cart>();
 
 	// Constructor
 	public Product() {
@@ -74,18 +73,16 @@ public class Product {
 		this.price = price;
 	}
 
-	public Product(String name, String image, String description, String code, int stock, double price,
-			Category category, List<Invoice> invoices, List<InvoiceDetail> invoiceDetails) {
+	public Product(String name, String image, String description, int stock, double price, Category category,
+			List<Ticket> tickets, List<ProductCart> productCart) {
 		super();
 		this.name = name;
 		this.image = image;
 		this.description = description;
-		this.code = code;
 		this.stock = stock;
 		this.price = price;
 		this.category = category;
-		this.invoices = invoices;
-		this.invoiceDetails = invoiceDetails;
+		this.productCart = productCart;
 	}
 
 	// GET y SET
@@ -93,20 +90,12 @@ public class Product {
 		return id;
 	}
 
-	public List<Invoice> getInvoices() {
-		return invoices;
+	public List<ProductCart> getProductCart() {
+		return productCart;
 	}
 
-	public void setInvoices(List<Invoice> invoices) {
-		this.invoices = invoices;
-	}
-
-	public List<InvoiceDetail> getInvoiceDetails() {
-		return invoiceDetails;
-	}
-
-	public void setInvoiceDetails(List<InvoiceDetail> invoiceDetails) {
-		this.invoiceDetails = invoiceDetails;
+	public void setProductCart(List<ProductCart> productCart) {
+		this.productCart = productCart;
 	}
 
 	public Category getCategory() {
@@ -143,10 +132,6 @@ public class Product {
 
 	public String getCode() {
 		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
 	}
 
 	public int getStock() {

@@ -2,7 +2,7 @@ package com.coderhouse.dto;
 
 import java.time.LocalDateTime;
 
-public class InvoiceDTO {
+public class TicketDTO {
 
 	private double total = 0D;
 	private LocalDateTime created_ad = LocalDateTime.now();

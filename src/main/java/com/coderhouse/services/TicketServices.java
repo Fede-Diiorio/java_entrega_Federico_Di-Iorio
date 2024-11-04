@@ -5,41 +5,40 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.coderhouse.dto.InvoiceDTO;
+import com.coderhouse.dto.TicketDTO;
 import com.coderhouse.models.Client;
-import com.coderhouse.models.Invoice;
+import com.coderhouse.models.Ticket;
 import com.coderhouse.repositories.ClientRepository;
-import com.coderhouse.repositories.InvoiceRepository;
+import com.coderhouse.repositories.TicketRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
-public class InvoiceService {
+public class TicketServices {
 
 	@Autowired
-	private InvoiceRepository invoiceRepository;
+	private TicketRepository invoiceRepository;
 	
 	@Autowired
 	private ClientRepository clientRepository;
 	
-	public List<Invoice> getAllInvoices() {
+	public List<Ticket> getAllInvoices() {
 		return invoiceRepository.findAll();
 	}
 	
-	public Invoice findById(Long id) {
+	public Ticket findById(Long id) {
 		return invoiceRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Factura no encontrada"));
 	}
 	
 	@Transactional
-	public Invoice createInvoice(InvoiceDTO invoiceDetails) {
+	public Ticket createInvoice(TicketDTO invoiceDetails) {
 		
 		Client client = clientRepository.findById(invoiceDetails.getClient_id())
 				.orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado"));
 		
-		Invoice invoice = new Invoice();
+		Ticket invoice = new Ticket();
 		invoice.setClient(client);
-		invoice.setCreated_at(invoiceDetails.getCreated_ad());
 		invoice.setTotal(invoiceDetails.getTotal());
 		
 		return invoiceRepository.save(invoice);

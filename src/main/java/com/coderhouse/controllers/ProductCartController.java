@@ -13,21 +13,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.coderhouse.dto.InvoiceDetailDTO;
-import com.coderhouse.models.InvoiceDetail;
-import com.coderhouse.services.InvoiceDetailsService;
+import com.coderhouse.dto.ProductCartDTO;
+import com.coderhouse.models.ProductCart;
+import com.coderhouse.services.ProductCartService;
 
 @RestController
 @RequestMapping("/api/invoice-details")
-public class InvoiceDetailController {
+public class ProductCartController {
 
 	@Autowired
-	private InvoiceDetailsService invoiceDetailsService;
+	private ProductCartService invoiceDetailsService;
 
 	@GetMapping
-	public ResponseEntity<List<InvoiceDetail>> getAllInvoiceDetails() {
+	public ResponseEntity<List<ProductCart>> getAllInvoiceDetails() {
 		try {
-			List<InvoiceDetail> details = invoiceDetailsService.getAllInvoicesDetails();
+			List<ProductCart> details = invoiceDetailsService.getAllInvoicesDetails();
 			return ResponseEntity.ok(details);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -36,9 +36,9 @@ public class InvoiceDetailController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<InvoiceDetail> findById(@PathVariable long id) {
+	public ResponseEntity<ProductCart> findById(@PathVariable long id) {
 		try {
-			InvoiceDetail details = invoiceDetailsService.findById(id);
+			ProductCart details = invoiceDetailsService.findById(id);
 			return ResponseEntity.ok(details);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
@@ -49,9 +49,9 @@ public class InvoiceDetailController {
 	}
 
 	@PostMapping
-	public ResponseEntity<InvoiceDetail> saveInvoiceDetails(@RequestBody InvoiceDetailDTO details) {
+	public ResponseEntity<ProductCart> saveInvoiceDetails(@RequestBody ProductCartDTO details) {
 		try {
-			InvoiceDetail invoiceDetails = invoiceDetailsService.saveInvoicesDetails(details);
+			ProductCart invoiceDetails = invoiceDetailsService.saveInvoicesDetails(details);
 			return ResponseEntity.ok(invoiceDetails);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -61,10 +61,10 @@ public class InvoiceDetailController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<InvoiceDetail> updateInvoiceDetails(@PathVariable Long id,
-			@RequestBody InvoiceDetail details) {
+	public ResponseEntity<ProductCart> updateInvoiceDetails(@PathVariable Long id,
+			@RequestBody ProductCart details) {
 		try {
-			InvoiceDetail invoiceDetails = invoiceDetailsService.updateInvoicesDetails(id, details);
+			ProductCart invoiceDetails = invoiceDetailsService.updateInvoicesDetails(id, details);
 			return ResponseEntity.ok(invoiceDetails);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);

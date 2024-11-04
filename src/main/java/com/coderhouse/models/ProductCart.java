@@ -10,13 +10,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "invoice_details")
-public class InvoiceDetail {
+@Table(name = "products_carts")
+public class ProductCart {
 
 	// Attributes
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "invoice_detail_id")
+	@Column(name = "products_carts_id")
 	private long id;
 
 	@Column(nullable = false)
@@ -26,19 +26,19 @@ public class InvoiceDetail {
 	private double price;
 
 	@ManyToOne
-	@JoinColumn(name = "product_id", nullable = false)
+	@JoinColumn(name = "products_id", nullable = false)
 	private Product product;
 
 	@ManyToOne
-	@JoinColumn(name = "invoice_id", nullable = false)
-	private Invoice invoice;
+	@JoinColumn(name = "ticket_id", nullable = false)
+	private Ticket ticket;
 
 	// Constructors
-	public InvoiceDetail() {
+	public ProductCart() {
 		super();
 	}
 
-	public InvoiceDetail(long id, int quantity, double price) {
+	public ProductCart(long id, int quantity, double price) {
 		super();
 		this.id = id;
 		this.quantity = quantity;
@@ -49,12 +49,12 @@ public class InvoiceDetail {
 		return id;
 	}
 
-	public Invoice getInvoice() {
-		return invoice;
+	public Ticket getTicket() {
+		return ticket;
 	}
 
-	public void setInvoice(Invoice invoice) {
-		this.invoice = invoice;
+	public void setTicket(Ticket ticekt) {
+		this.ticket = ticekt;
 	}
 
 	public Product getProduct() {

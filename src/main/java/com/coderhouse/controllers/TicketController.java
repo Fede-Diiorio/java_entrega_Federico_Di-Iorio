@@ -12,21 +12,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.coderhouse.dto.InvoiceDTO;
-import com.coderhouse.models.Invoice;
-import com.coderhouse.services.InvoiceService;
+import com.coderhouse.dto.TicketDTO;
+import com.coderhouse.models.Ticket;
+import com.coderhouse.services.TicketServices;
 
 @RestController
 @RequestMapping("/api/invoices")
-public class InvoiceController {
+public class TicketController {
 
 	@Autowired
-	private InvoiceService invoiceService;
+	private TicketServices invoiceService;
 
 	@GetMapping
-	public ResponseEntity<List<Invoice>> getAllInvoices() {
+	public ResponseEntity<List<Ticket>> getAllInvoices() {
 		try {
-			List<Invoice> invoices = invoiceService.getAllInvoices();
+			List<Ticket> invoices = invoiceService.getAllInvoices();
 			return ResponseEntity.ok(invoices);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -34,9 +34,9 @@ public class InvoiceController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Invoice> getInvoiceById(@PathVariable long id) {
+	public ResponseEntity<Ticket> getInvoiceById(@PathVariable long id) {
 		try {
-			Invoice invoice = invoiceService.findById(id);
+			Ticket invoice = invoiceService.findById(id);
 			return ResponseEntity.ok(invoice);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
@@ -46,9 +46,9 @@ public class InvoiceController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Invoice> createInvoice(@RequestBody InvoiceDTO invoice) {
+	public ResponseEntity<Ticket> createInvoice(@RequestBody TicketDTO invoice) {
 		try {
-			Invoice createdInvoice = invoiceService.createInvoice(invoice);
+			Ticket createdInvoice = invoiceService.createInvoice(invoice);
 			return ResponseEntity.ok(createdInvoice);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);

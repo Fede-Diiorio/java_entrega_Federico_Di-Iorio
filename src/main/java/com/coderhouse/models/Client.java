@@ -35,7 +35,7 @@ public class Client {
 
 	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JsonIgnore
-	private List<Invoice> invoices = new ArrayList<Invoice>();
+	private List<Ticket> ticket = new ArrayList<Ticket>();
 
 	// Constructor
 	public Client() {
