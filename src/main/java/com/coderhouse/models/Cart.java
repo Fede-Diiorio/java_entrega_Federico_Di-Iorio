@@ -1,16 +1,13 @@
 package com.coderhouse.models;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,37 +20,16 @@ public class Cart {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToOne
-	@JoinColumn(name = "client_id", nullable = false)
-	private Client client;
+	@OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductCart> products;
 
-	@ManyToMany(mappedBy = "carts", fetch = FetchType.LAZY)
-	private List<Product> products = new ArrayList<Product>();
-	
-	@OneToOne
-	@JoinColumn(name = "ticket_id")
-	private Ticket ticket;
 
-	// Constructor
-
-	public Cart() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public Client getClient() {
-		return client;
-	}
-
-	public void setClient(Client client) {
-		this.client = client;
-	}
-
-	public List<Product> getProducts() {
+	// GET y SET
+	public List<ProductCart> getProducts() {
 		return products;
 	}
 
-	public void setProducts(List<Product> products) {
+	public void setProducts(List<ProductCart> products) {
 		this.products = products;
 	}
 
@@ -65,5 +41,4 @@ public class Cart {
 	public String toString() {
 		return "Cart [id=" + id + "]";
 	}
-
 }

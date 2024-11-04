@@ -3,22 +3,17 @@ package com.coderhouse.models;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "ticket")
+@Table(name = "tickets")
 public class Ticket {
 
 	@Id
@@ -35,11 +30,6 @@ public class Ticket {
 	@Column(nullable = false, updatable = false)
 	private LocalDateTime createdAt = LocalDateTime.now();
 
-
-	@OneToOne(mappedBy = "ticket", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-	@JsonIgnore
-	private Cart cart;
-
 	@Column(nullable = false, unique = true, updatable = false)
 	private String code = UUID.randomUUID().toString().replace("-", "");
 
@@ -50,7 +40,6 @@ public class Ticket {
 	public Ticket(Client client, double total, Cart cart) {
 		this.client = client;
 		this.total = total;
-		this.cart = cart;
 	}
 
 	// Getters and Setters
@@ -76,15 +65,6 @@ public class Ticket {
 
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
-	}
-
-
-	public Cart getCart() {
-		return cart;
-	}
-
-	public void setCart(Cart cart) {
-		this.cart = cart;
 	}
 
 	public String getCode() {

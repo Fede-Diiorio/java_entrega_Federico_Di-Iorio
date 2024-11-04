@@ -2,6 +2,7 @@ package com.coderhouse.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,41 +21,28 @@ public class ProductCart {
 	private long id;
 
 	@Column(nullable = false)
-	private int quantity;
-
-	@Column(nullable = false)
-	private double price;
+	private int quantity = 0;
 
 	@ManyToOne
-	@JoinColumn(name = "products_id", nullable = false)
+	@JoinColumn(name = "product_id")
 	private Product product;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "cart_id")
+	private Cart cart;
+
 	@ManyToOne
-	@JoinColumn(name = "ticket_id", nullable = false)
+	@JoinColumn(name = "ticket_id")
 	private Ticket ticket;
 
-	// Constructors
-	public ProductCart() {
-		super();
+	// GET y SET
+
+	public int getQuantity() {
+		return quantity;
 	}
 
-	public ProductCart(long id, int quantity, double price) {
-		super();
-		this.id = id;
+	public void setQuantity(int quantity) {
 		this.quantity = quantity;
-		this.price = price;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public Ticket getTicket() {
-		return ticket;
-	}
-
-	public void setTicket(Ticket ticekt) {
-		this.ticket = ticekt;
 	}
 
 	public Product getProduct() {
@@ -65,25 +53,29 @@ public class ProductCart {
 		this.product = product;
 	}
 
-	public int getQuantity() {
-		return quantity;
+	public Cart getCart() {
+		return cart;
 	}
 
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
+	public void setCart(Cart cart) {
+		this.cart = cart;
 	}
 
-	public double getPrice() {
-		return price;
+	public Ticket getTicket() {
+		return ticket;
 	}
 
-	public void setPrice(double price) {
-		this.price = price;
+	public void setTicket(Ticket ticket) {
+		this.ticket = ticket;
 	}
 
+	public long getId() {
+		return id;
+	}
+	
 	@Override
 	public String toString() {
-		return "InvoiceDetail [id=" + id + ", quantity=" + quantity + ", price=" + price + "]";
+		return "ProductCart [id=" + id + ", quantity=" + quantity + "]";
 	}
 
 }

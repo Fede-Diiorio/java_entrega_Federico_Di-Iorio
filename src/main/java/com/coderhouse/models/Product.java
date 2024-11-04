@@ -14,7 +14,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -31,6 +30,9 @@ public class Product {
 	@Column(nullable = false, length = 50)
 	private String name;
 
+	@Column(nullable = false)
+	private double price;
+
 	@Column(length = 200)
 	private String image;
 
@@ -43,19 +45,14 @@ public class Product {
 	@Column(nullable = false)
 	private int stock;
 
-	@Column(nullable = false)
-	private double price;
-
 	@ManyToOne
 	@JoinColumn(name = "category", nullable = false)
 	private Category category;
 
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<ProductCart> productCart = new ArrayList<>();
+	@JsonIgnore
+	private List<ProductCart> productCart = new ArrayList<>();
 
-	@ManyToMany
-	private List<Cart> carts = new ArrayList<Cart>();
 
 	// Constructor
 	public Product() {
@@ -73,17 +70,17 @@ public class Product {
 		this.price = price;
 	}
 
-	public Product(String name, String image, String description, int stock, double price, Category category,
-			List<Ticket> tickets, List<ProductCart> productCart) {
-		super();
-		this.name = name;
-		this.image = image;
-		this.description = description;
-		this.stock = stock;
-		this.price = price;
-		this.category = category;
-		this.productCart = productCart;
-	}
+//	public Product(String name, String image, String description, int stock, double price, Category category,
+//			List<Ticket> tickets, List<ProductCart> productCart) {
+//		super();
+//		this.name = name;
+//		this.image = image;
+//		this.description = description;
+//		this.stock = stock;
+//		this.price = price;
+//		this.category = category;
+//		this.productCart = productCart;
+//	}
 
 	// GET y SET
 	public long getId() {
