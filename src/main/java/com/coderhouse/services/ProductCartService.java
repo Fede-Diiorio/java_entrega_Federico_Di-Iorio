@@ -1,6 +1,7 @@
 package com.coderhouse.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,21 +39,29 @@ public class ProductCartService {
 	@Transactional
 	public ProductCart addProductToCart(Long cid, Long pid, int quantity) {
 		
-		System.out.println("ID Carrito: " + cid);
-	    System.out.println("ID Producto: " + pid);
-		
+		if(quantity <= 0) {
+			throw new IllegalArgumentException("Tiene que ingresar una cantidad superior a cero.");
+		}
+
 		Cart cart = cartRepository.findById(cid)
 				.orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
 
 		Product product = productRepository.findById(pid)
 				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
 
-		ProductCart productCart = new ProductCart();
-		productCart.setCart(cart);
-		productCart.setProduct(product);
-		productCart.setQuantity(quantity);
+	    Optional<ProductCart> existingProductCart = productCartRepository.findByCartAndProduct(cart, product);
 
-		return productCartRepository.save(productCart);
+	    if (existingProductCart.isPresent()) {
+	        ProductCart productCart = existingProductCart.get();
+	        productCart.setQuantity(quantity);
+	        return productCartRepository.save(productCart);
+	    } else {
+	        ProductCart newProductCart = new ProductCart();
+	        newProductCart.setQuantity(quantity);
+	        newProductCart.setCart(cart);
+	        newProductCart.setProduct(product);
+	        return productCartRepository.save(newProductCart);
+	    }
 
 	}
 

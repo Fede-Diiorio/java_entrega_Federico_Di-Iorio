@@ -32,7 +32,6 @@ public class ProductCart {
 
 	@ManyToOne
 	@JoinColumn(name = "product_id")
-	@JsonIgnore
 	private Product product;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -49,7 +48,6 @@ public class ProductCart {
 	public ProductCart() {}
 
 	// GET y SET
-
 	public int getQuantity() {
 		return quantity;
 	}
