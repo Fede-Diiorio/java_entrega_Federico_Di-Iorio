@@ -1,5 +1,7 @@
 package com.coderhouse.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,6 +10,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,19 +25,28 @@ public class ProductCart {
 	private long id;
 
 	@Column(nullable = false)
-	private int quantity = 0;
+	private int quantity;
+
+	@Column(nullable = false)
+	private double price;
 
 	@ManyToOne
 	@JoinColumn(name = "product_id")
+	@JsonIgnore
 	private Product product;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cart_id")
+	@JsonIgnore
 	private Cart cart;
 
 	@ManyToOne
 	@JoinColumn(name = "ticket_id")
+	@JsonIgnore
 	private Ticket ticket;
+	
+	//Constructor
+	public ProductCart() {}
 
 	// GET y SET
 
@@ -42,6 +55,10 @@ public class ProductCart {
 	}
 
 	public void setQuantity(int quantity) {
+		if(quantity <= 0) {
+			throw new IllegalArgumentException("Cantidad ingresada inválida");
+		}
+		updatePrice();
 		this.quantity = quantity;
 	}
 
@@ -50,7 +67,8 @@ public class ProductCart {
 	}
 
 	public void setProduct(Product product) {
-		this.product = product;
+	    this.product = product;
+	    updatePrice();
 	}
 
 	public Cart getCart() {
@@ -69,10 +87,27 @@ public class ProductCart {
 		this.ticket = ticket;
 	}
 
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
 	public long getId() {
 		return id;
 	}
 	
+	//Methods
+	@PrePersist
+	@PreUpdate
+	public void updatePrice() {
+		if(product != null) {
+			this.price = product.getPrice() * quantity;
+		}
+	}
+
 	@Override
 	public String toString() {
 		return "ProductCart [id=" + id + ", quantity=" + quantity + "]";

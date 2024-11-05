@@ -5,12 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.coderhouse.dto.ProductCartDTO;
-import com.coderhouse.models.Ticket;
 import com.coderhouse.models.ProductCart;
+import com.coderhouse.models.Cart;
 import com.coderhouse.models.Product;
+import com.coderhouse.repositories.CartRepository;
 import com.coderhouse.repositories.ProductCartRepository;
-import com.coderhouse.repositories.TicketRepository;
 import com.coderhouse.repositories.ProductRepository;
 
 import jakarta.transaction.Transactional;
@@ -19,48 +18,42 @@ import jakarta.transaction.Transactional;
 public class ProductCartService {
 
 	@Autowired
-	private ProductCartRepository invoiceDetailsRepository;
+	private ProductCartRepository productCartRepository;
 
 	@Autowired
-	private TicketRepository invoiceRepository;
+	private CartRepository cartRepository;
 
 	@Autowired
 	private ProductRepository productRepository;
 
-	public List<ProductCart> getAllInvoicesDetails() {
-		return invoiceDetailsRepository.findAll();
+	public List<ProductCart> getAllProductCart() {
+		return productCartRepository.findAll();
 	}
 
 	public ProductCart findById(Long id) {
-		return invoiceDetailsRepository.findById(id)
+		return productCartRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("El detalle no existe"));
 	}
 
 	@Transactional
-	public ProductCart saveInvoicesDetails(ProductCartDTO invoiceDetailDTO) {
-		Ticket invoice = invoiceRepository.findById(invoiceDetailDTO.getInvoice_id())
-				.orElseThrow(() -> new IllegalArgumentException("Factura no encontrada"));
+	public ProductCart addProductToCart(Long cid, Long pid, int quantity) {
+		
+		System.out.println("ID Carrito: " + cid);
+	    System.out.println("ID Producto: " + pid);
+		
+		Cart cart = cartRepository.findById(cid)
+				.orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
 
-		Product product = productRepository.findById(invoiceDetailDTO.getProduct_id())
+		Product product = productRepository.findById(pid)
 				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
 
-		ProductCart invoiceDetail = new ProductCart();
+		ProductCart productCart = new ProductCart();
+		productCart.setCart(cart);
+		productCart.setProduct(product);
+		productCart.setQuantity(quantity);
 
-		invoiceDetail.setQuantity(invoiceDetailDTO.getQuantity());
-		invoiceDetail.setProduct(product);
-		invoiceDetail.setTicket(invoice);
+		return productCartRepository.save(productCart);
 
-		return invoiceDetailsRepository.save(invoiceDetail);
-	}
-
-	@Transactional
-	public ProductCart updateInvoicesDetails(Long id, ProductCart details) {
-		ProductCart invoiceDetail = invoiceDetailsRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Detalle de factura no encontrado"));
-		
-		invoiceDetail.setQuantity(details.getQuantity());
-		
-		return invoiceDetailsRepository.save(invoiceDetail);
 	}
 
 }

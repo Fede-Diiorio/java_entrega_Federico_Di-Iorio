@@ -19,11 +19,11 @@ public class CartService {
 	}
 
 	public Cart findById(Long id) {
-		return cartRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
+		return cartRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
 	}
 
 	public Cart saveCart(Cart cart) {
 		return cartRepository.save(cart);
 	}
+
 }

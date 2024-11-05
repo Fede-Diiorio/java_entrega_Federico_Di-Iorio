@@ -8,26 +8,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.coderhouse.dto.ProductCartDTO;
+import com.coderhouse.dto.QuantityDTO;
 import com.coderhouse.models.ProductCart;
 import com.coderhouse.services.ProductCartService;
 
 @RestController
-@RequestMapping("/api/invoice-details")
+@RequestMapping("/api/products-carts")
 public class ProductCartController {
 
 	@Autowired
-	private ProductCartService invoiceDetailsService;
+	private ProductCartService productCartService;
 
 	@GetMapping
 	public ResponseEntity<List<ProductCart>> getAllInvoiceDetails() {
 		try {
-			List<ProductCart> details = invoiceDetailsService.getAllInvoicesDetails();
+			List<ProductCart> details = productCartService.getAllProductCart();
 			return ResponseEntity.ok(details);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -38,7 +37,7 @@ public class ProductCartController {
 	@GetMapping("/{id}")
 	public ResponseEntity<ProductCart> findById(@PathVariable long id) {
 		try {
-			ProductCart details = invoiceDetailsService.findById(id);
+			ProductCart details = productCartService.findById(id);
 			return ResponseEntity.ok(details);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
@@ -48,28 +47,19 @@ public class ProductCartController {
 
 	}
 
-	@PostMapping
-	public ResponseEntity<ProductCart> saveInvoiceDetails(@RequestBody ProductCartDTO details) {
-		try {
-			ProductCart invoiceDetails = invoiceDetailsService.saveInvoicesDetails(details);
-			return ResponseEntity.ok(invoiceDetails);
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
+	@PostMapping("/{cid}/product/{pid}")
+	public ResponseEntity<ProductCart> addProductToCart(@PathVariable long cid, @PathVariable long pid,
+	        @RequestBody QuantityDTO quantityDTO) {
+	    try {
+	        int quantity = quantityDTO.getQuantity();
+	        ProductCart productCart = productCartService.addProductToCart(cid, pid, quantity);
+	        return ResponseEntity.ok(productCart);
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.notFound().build();
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<ProductCart> updateInvoiceDetails(@PathVariable Long id,
-			@RequestBody ProductCart details) {
-		try {
-			ProductCart invoiceDetails = invoiceDetailsService.updateInvoicesDetails(id, details);
-			return ResponseEntity.ok(invoiceDetails);
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
-	}
+
 }
