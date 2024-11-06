@@ -40,7 +40,7 @@ public class Client {
 	private Cart cart;
 
 	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//	@JsonIgnore
+	@JsonIgnore
 	private List<Ticket> ticket = new ArrayList<Ticket>();
 
 	// Constructor

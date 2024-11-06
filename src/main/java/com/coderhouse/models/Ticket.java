@@ -3,6 +3,8 @@ package com.coderhouse.models;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +24,7 @@ public class Ticket {
 
 	@ManyToOne
 	@JoinColumn(name = "client_id", referencedColumnName = "id")
+	@JsonIgnore
 	private Client client;
 
 	@Column(nullable = false)
