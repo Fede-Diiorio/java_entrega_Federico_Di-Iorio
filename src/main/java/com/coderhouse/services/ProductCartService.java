@@ -30,6 +30,10 @@ public class ProductCartService {
 	public List<ProductCart> getAllProductCart() {
 		return productCartRepository.findAll();
 	}
+	
+	public List<ProductCart> getAllProductsFromCart(Long cart) {
+		return productCartRepository.findByCartId(cart);
+	}
 
 	public ProductCart findById(Long id) {
 		return productCartRepository.findById(id)
