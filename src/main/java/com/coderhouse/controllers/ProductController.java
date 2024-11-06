@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.coderhouse.dto.CategoryAssignmentDTO;
 import com.coderhouse.dto.ProductDTO;
 import com.coderhouse.models.Product;
 import com.coderhouse.services.ProductService;
@@ -49,14 +50,27 @@ public class ProductController {
 
 	@PostMapping
 	public ResponseEntity<Product> saveProduct(@RequestBody ProductDTO product) {
-	    try {
-	        Product createdProduct = productService.saveProduct(product);
-	        return ResponseEntity.ok(createdProduct);
-	    } catch (IllegalArgumentException e) {
-	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-	    } catch (Exception e) {
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-	    }
+		try {
+			Product createdProduct = productService.saveProduct(product);
+			return ResponseEntity.ok(createdProduct);
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	@PostMapping("/assign-category")
+	public ResponseEntity<Product> assingCategoryToProduct(@RequestBody CategoryAssignmentDTO assignmentDTO) {
+		try {
+			Product updatedProduct = productService.assignCategoryToProduct(assignmentDTO.getProductId(),
+					assignmentDTO.getCategoryId());
+			return ResponseEntity.ok(updatedProduct);
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 
 	@PutMapping("{id}")

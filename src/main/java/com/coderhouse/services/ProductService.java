@@ -27,8 +27,7 @@ public class ProductService {
 	}
 
 	public Product findById(Long id) {
-		return productRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
+		return productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
 	}
 
 	@Transactional
@@ -75,6 +74,19 @@ public class ProductService {
 
 		return productRepository.save(product);
 
+	}
+
+	@Transactional
+	public Product assignCategoryToProduct(Long pid, Long cid) {
+
+		Product product = productRepository.findById(pid)
+				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado."));
+
+		Category category = categoryRepository.findById(cid)
+				.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
+
+		product.setCategory(category);
+		return productRepository.save(product);
 	}
 
 	public void deleteProduct(Long id) {

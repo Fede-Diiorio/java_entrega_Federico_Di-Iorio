@@ -80,6 +80,36 @@
 					"response": []
 				},
 				{
+					"name": "AddCategoryToProduct",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productId\": 13,\r\n    \"categoryId\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/products/assign-category",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"products",
+								"assign-category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "UpdateProduct",
 					"request": {
 						"method": "PUT",
@@ -94,7 +124,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/products/13",
+							"raw": "http://localhost:8080/api/products/14",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -103,7 +133,7 @@
 							"path": [
 								"api",
 								"products",
-								"13"
+								"14"
 							]
 						}
 					},
