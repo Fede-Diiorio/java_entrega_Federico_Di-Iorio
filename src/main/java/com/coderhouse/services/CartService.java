@@ -14,6 +14,9 @@ public class CartService {
 	@Autowired
 	private CartRepository cartRepository;
 
+	@Autowired
+	private ProductCartService productCartService;
+
 	public List<Cart> getAllCarts() {
 		return cartRepository.findAll();
 	}
@@ -26,4 +29,12 @@ public class CartService {
 		return cartRepository.save(cart);
 	}
 
+	public Cart clearCart(Long id) {
+		Cart cart = cartRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
+
+		productCartService.deleteProductCartByCartId(id);
+
+		return cartRepository.save(cart);
+	}
 }
