@@ -45,6 +45,8 @@ public class TicketService {
 	    ticket.setTotal(adder);
 	    ticket.setClient(client);
 	    
+	    productCartService.deleteProductCartByCartId(cid);
+	    
 	    return ticketRepository.save(ticket);
 	}
 	

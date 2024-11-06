@@ -30,7 +30,7 @@ public class ProductCartService {
 	public List<ProductCart> getAllProductCart() {
 		return productCartRepository.findAll();
 	}
-	
+
 	public List<ProductCart> getAllProductsFromCart(Long cart) {
 		return productCartRepository.findByCartId(cart);
 	}
@@ -42,8 +42,8 @@ public class ProductCartService {
 
 	@Transactional
 	public ProductCart addProductToCart(Long cid, Long pid, int quantity) {
-		
-		if(quantity <= 0) {
+
+		if (quantity <= 0) {
 			throw new IllegalArgumentException("Tiene que ingresar una cantidad superior a cero.");
 		}
 
@@ -53,20 +53,24 @@ public class ProductCartService {
 		Product product = productRepository.findById(pid)
 				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
 
-	    Optional<ProductCart> existingProductCart = productCartRepository.findByCartAndProduct(cart, product);
+		Optional<ProductCart> existingProductCart = productCartRepository.findByCartAndProduct(cart, product);
 
-	    if (existingProductCart.isPresent()) {
-	        ProductCart productCart = existingProductCart.get();
-	        productCart.setQuantity(quantity);
-	        return productCartRepository.save(productCart);
-	    } else {
-	        ProductCart newProductCart = new ProductCart();
-	        newProductCart.setQuantity(quantity);
-	        newProductCart.setCart(cart);
-	        newProductCart.setProduct(product);
-	        return productCartRepository.save(newProductCart);
-	    }
+		if (existingProductCart.isPresent()) {
+			ProductCart productCart = existingProductCart.get();
+			productCart.setQuantity(quantity);
+			return productCartRepository.save(productCart);
+		} else {
+			ProductCart newProductCart = new ProductCart();
+			newProductCart.setQuantity(quantity);
+			newProductCart.setCart(cart);
+			newProductCart.setProduct(product);
+			return productCartRepository.save(newProductCart);
+		}
 
+	}
+	
+	public void deleteProductCartByCartId(long cid) {
+		productCartRepository.deleteByCartId(cid);
 	}
 
 }
