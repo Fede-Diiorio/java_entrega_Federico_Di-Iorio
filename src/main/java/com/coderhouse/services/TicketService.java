@@ -25,6 +25,14 @@ public class TicketService {
 	@Autowired
 	private ClientRepository clientRepository;
 	
+	public List<Ticket> getAllTickets() {
+		return ticketRepository.findAll();
+	}
+	
+	public List<Ticket> getAllTicketsByClient(Long id) {
+		return ticketRepository.findByClientId(id);
+	}
+	
 	@Transactional
 	public Ticket saveTicket(Long cid) {
 	    List<ProductCart> products = productCartService.getAllProductsFromCart(cid);
@@ -39,6 +47,10 @@ public class TicketService {
 	    
 	    for(ProductCart product : products) {
 	        adder += product.getPrice();
+	    }
+	    
+	    if(adder == 0) {
+	    	throw new IllegalArgumentException("Su carrito se encuentra vacío. No hay nada para facturar");
 	    }
 	    
 	    Ticket ticket = new Ticket();
