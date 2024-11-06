@@ -57,18 +57,6 @@ public class CartController {
 		}
 	}
 
-	@PostMapping
-	public ResponseEntity<Cart> saveCart(@RequestBody Cart cart) {
-		try {
-			Cart createdCart = cartService.saveCart(cart);
-			return ResponseEntity.ok(createdCart);
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
-	}
-
 	@PostMapping("/{cid}/product/{pid}")
 	public ResponseEntity<ProductCart> addProductToCart(@PathVariable long cid, @PathVariable long pid,
 			@RequestBody QuantityDTO quantityDTO) {
@@ -94,7 +82,7 @@ public class CartController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Cart> clearCart(@PathVariable Long id) {
 		try {

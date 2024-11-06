@@ -46,7 +46,7 @@ public class Product {
 	private int stock;
 
 	@ManyToOne
-	@JoinColumn(name = "category", nullable = false)
+	@JoinColumn(name = "category")
 	private Category category;
 
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
