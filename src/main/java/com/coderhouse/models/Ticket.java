@@ -33,7 +33,7 @@ public class Ticket {
 	@Column(nullable = false, updatable = false)
 	private LocalDateTime createdAt = LocalDateTime.now();
 
-	@Column(nullable = false, unique = true, updatable = false)
+	@Column(nullable = false, unique = true, updatable = false, length = 35)
 	private String code = UUID.randomUUID().toString().replace("-", "");
 
 	// Constructors

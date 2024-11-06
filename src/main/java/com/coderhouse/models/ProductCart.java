@@ -39,10 +39,6 @@ public class ProductCart {
 	@JsonIgnore
 	private Cart cart;
 
-	@ManyToOne
-	@JoinColumn(name = "ticket_id")
-	@JsonIgnore
-	private Ticket ticket;
 	
 	//Constructor
 	public ProductCart() {}
@@ -75,14 +71,6 @@ public class ProductCart {
 
 	public void setCart(Cart cart) {
 		this.cart = cart;
-	}
-
-	public Ticket getTicket() {
-		return ticket;
-	}
-
-	public void setTicket(Ticket ticket) {
-		this.ticket = ticket;
 	}
 
 	public void setPrice(double price) {
