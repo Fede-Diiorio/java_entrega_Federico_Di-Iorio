@@ -34,18 +34,19 @@ public class TicketService {
 	}
 	
 	@Transactional
-	public Ticket saveTicket(Long cid) {
-	    List<ProductCart> products = productCartService.getAllProductsFromCart(cid);
+	public Ticket saveTicket(Long cartId) {
+	    List<ProductCart> products = productCartService.getAllProductsFromCart(cartId);
 	    
-	    Client client = clientRepository.findByCartId(cid);
+	    Client client = clientRepository.findByCartId(cartId);
 	    
 	    if (client == null || client.getId() == 0) {
-	        throw new IllegalArgumentException("Invalid client: " + cid);
+	        throw new IllegalArgumentException("Invalid client: " + cartId);
 	    }
 	    
 	    double adder = 0;
 	    
 	    for(ProductCart product : products) {
+	    	product.getProduct().setStock(product.getProduct().getStock() - product.getQuantity());
 	        adder += product.getPrice();
 	    }
 	    
@@ -57,7 +58,7 @@ public class TicketService {
 	    ticket.setTotal(adder);
 	    ticket.setClient(client);
 	    
-	    productCartService.deleteProductCartByCartId(cid);
+	    productCartService.deleteProductCartByCartId(cartId);
 	    
 	    return ticketRepository.save(ticket);
 	}
