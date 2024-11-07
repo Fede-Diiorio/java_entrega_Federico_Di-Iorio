@@ -57,12 +57,12 @@ public class CartController {
 		}
 	}
 
-	@PostMapping("/{cid}/product/{pid}")
-	public ResponseEntity<ProductCart> addProductToCart(@PathVariable long cid, @PathVariable long pid,
+	@PostMapping("/{cartId}/product/{productId}")
+	public ResponseEntity<ProductCart> addProductToCart(@PathVariable long cartId, @PathVariable long productId,
 			@RequestBody QuantityDTO quantityDTO) {
 		try {
 			int quantity = quantityDTO.getQuantity();
-			ProductCart productCart = productCartService.addProductToCart(cid, pid, quantity);
+			ProductCart productCart = productCartService.addProductToCart(cartId, productId, quantity);
 			return ResponseEntity.ok(productCart);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
@@ -71,10 +71,22 @@ public class CartController {
 		}
 	}
 
-	@PostMapping("/{cid}/ticket")
-	public ResponseEntity<Ticket> createTicket(@PathVariable long cid) {
+	@DeleteMapping("/{cartId}/product/{productId}")
+	public ResponseEntity<Void> deleteProductInCart(@PathVariable long cartId, @PathVariable long productId) {
 		try {
-			Ticket ticket = ticketService.saveTicket(cid);
+			productCartService.deleteProductInCart(cartId, productId);
+			return ResponseEntity.noContent().build();
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.notFound().build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	@PostMapping("/{cartId}/ticket")
+	public ResponseEntity<Ticket> createTicket(@PathVariable long cartId) {
+		try {
+			Ticket ticket = ticketService.saveTicket(cartId);
 			return ResponseEntity.ok(ticket);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
@@ -83,11 +95,11 @@ public class CartController {
 		}
 	}
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Cart> clearCart(@PathVariable Long id) {
+	@DeleteMapping("/{cartId}")
+	public ResponseEntity<Cart> clearCart(@PathVariable Long cartId) {
 		try {
-			cartService.clearCart(id);
-			Cart cart = cartService.findById(id);
+			cartService.clearCart(cartId);
+			Cart cart = cartService.findById(cartId);
 			return ResponseEntity.ok(cart);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();

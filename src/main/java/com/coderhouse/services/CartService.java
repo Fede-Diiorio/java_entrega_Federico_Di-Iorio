@@ -28,7 +28,7 @@ public class CartService {
 	public Cart saveCart(Cart cart) {
 		return cartRepository.save(cart);
 	}
-
+	
 	public Cart clearCart(Long id) {
 		Cart cart = cartRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
@@ -37,4 +37,5 @@ public class CartService {
 
 		return cartRepository.save(cart);
 	}
+	
 }

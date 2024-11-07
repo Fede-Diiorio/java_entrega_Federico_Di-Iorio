@@ -41,16 +41,16 @@ public class ProductCartService {
 	}
 
 	@Transactional
-	public ProductCart addProductToCart(Long cid, Long pid, int quantity) {
+	public ProductCart addProductToCart(Long cartId, Long productId, int quantity) {
 
 		if (quantity <= 0) {
 			throw new IllegalArgumentException("Tiene que ingresar una cantidad superior a cero.");
 		}
 
-		Cart cart = cartRepository.findById(cid)
+		Cart cart = cartRepository.findById(cartId)
 				.orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
 
-		Product product = productRepository.findById(pid)
+		Product product = productRepository.findById(productId)
 				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
 
 		Optional<ProductCart> existingProductCart = productCartRepository.findByCartAndProduct(cart, product);
@@ -68,9 +68,27 @@ public class ProductCartService {
 		}
 
 	}
-	
-	public void deleteProductCartByCartId(long cid) {
-		productCartRepository.deleteByCartId(cid);
+
+	public void deleteProductInCart(Long cartId, Long productId) {
+	    Cart cart = cartRepository.findById(cartId)
+	            .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
+
+	    Product product = productRepository.findById(productId)
+	            .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
+
+	    Optional<ProductCart> existingProductCart = productCartRepository.findByCartAndProduct(cart, product);
+
+	    if (existingProductCart.isPresent()) {
+	        ProductCart productCart = existingProductCart.get();
+	        productCartRepository.deleteById(productCart.getId());
+	    } else {
+	        throw new IllegalArgumentException("Producto no encontrado en el carrito");
+	    }
+	}
+
+
+	public void deleteProductCartByCartId(long cartId) {
+		productCartRepository.deleteByCartId(cartId);
 	}
 
 }
