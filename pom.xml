@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.coderhouse</groupId>
 	<artifactId>EntregaCoder</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>v1.0.0</version>
 	<name>EntregaCoder</name>
 	<description>Primer entrega del proyecto de java para coderhouse</description>
 	<url />
