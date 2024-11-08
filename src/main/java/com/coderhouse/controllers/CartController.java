@@ -101,7 +101,6 @@ public class CartController {
 					@Content(mediaType = "application/json", schema = @Schema(implementation = Cart.class)) }),
 			@ApiResponse(responseCode = "404", description = "Producto o carrito no encontrado según su ID", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
-	@PostMapping("/{cartId}/product/{productId}")
 	@DeleteMapping("/{cartId}/product/{productId}")
 	public ResponseEntity<Void> deleteProductInCart(@PathVariable long cartId, @PathVariable long productId) {
 		try {
@@ -116,7 +115,7 @@ public class CartController {
 
 	@Operation(summary = "Genera un nuevo ticket y vacia el carrito")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Tecket creado de forma correcta", content = {
+			@ApiResponse(responseCode = "200", description = "Ticket creado de forma correcta", content = {
 					@Content(mediaType = "application/json", schema = @Schema(implementation = Ticket.class)) }),
 			@ApiResponse(responseCode = "404", description = "Carrito no encontrado según su ID o carrito vacio", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
