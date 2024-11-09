@@ -19,6 +19,7 @@ La aplicación creará automáticamente tablas en una base de datos llamada **co
    CREATE DATABASE IF NOT EXISTS coderhouse;
    ```
 3. Asegúrate de que tu usuario de MySQL tenga permisos para acceder y modificar esta base de datos.
+4. Para más información puedes guiarte con el archivo [CoderScript](https://github.com/Fede-Diiorio/java_entrega_Federico_Di-Iorio/blob/main/coderScript.sql) adjunto en este mismo repositorio.
 
 ### 2. Configurar el archivo `application.properties`
 En el archivo `application.properties` (ubicado en `src/main/resources/`), verifica que la configuración de conexión a la base de datos coincida con tus credenciales y detalles de conexión. Aquí tienes un ejemplo básico de cómo debería verse:
@@ -40,6 +41,8 @@ Para ejecutar el proyecto y generar automáticamente las tablas:
 1. Abre el proyecto en **Eclipse**.
 2. Dirígete al archivo principal de la aplicación (con la anotación `@EntregaCoderApplication`) y ejecútalo.
 3. Al iniciarse, Spring Boot se conectará a la base de datos y generará las tablas configuradas en tus entidades.
+4. Ten en cuenta que puedes ejecutar el código SQL del archivo [CoderScript](https://github.com/Fede-Diiorio/java_entrega_Federico_Di-Iorio/blob/main/coderScript.sql) tanto como para crear la base de datos y, además, insertar algunos registros para poder trabajar con los mismos.
+5. Hecho todo esto y con la aplicación corriendo podrás ejecutar todos los endpoints, adjuntos en este repositorio, que encontraras en el archivo [JavaAPI](https://github.com/Fede-Diiorio/java_entrega_Federico_Di-Iorio/blob/main/JavaAPI.postman_collection.json).
 
 ### Notas adicionales
 - Asegúrate de que el puerto y host en `spring.datasource.url` coincidan con tu configuración de MySQL.
