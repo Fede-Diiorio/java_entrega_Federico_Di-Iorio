@@ -13,7 +13,17 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @Entity
 @Table(name = "products_carts")
 public class ProductCart {
@@ -39,64 +49,26 @@ public class ProductCart {
 	@JsonIgnore
 	private Cart cart;
 
-	
-	//Constructor
-	public ProductCart() {}
-
-	// GET y SET
-	public int getQuantity() {
-		return quantity;
-	}
-
 	public void setQuantity(int quantity) {
-		if(quantity <= 0) {
+		if (quantity <= 0) {
 			throw new IllegalArgumentException("Cantidad ingresada inválida");
 		}
 		updatePrice();
 		this.quantity = quantity;
 	}
 
-	public Product getProduct() {
-		return product;
-	}
-
 	public void setProduct(Product product) {
-	    this.product = product;
-	    updatePrice();
+		this.product = product;
+		updatePrice();
 	}
 
-	public Cart getCart() {
-		return cart;
-	}
-
-	public void setCart(Cart cart) {
-		this.cart = cart;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public long getId() {
-		return id;
-	}
-	
-	//Methods
+	// Methods
 	@PrePersist
 	@PreUpdate
 	public void updatePrice() {
-		if(product != null) {
+		if (product != null) {
 			this.price = product.getPrice() * quantity;
 		}
-	}
-
-	@Override
-	public String toString() {
-		return "ProductCart [id=" + id + ", quantity=" + quantity + "]";
 	}
 
 }

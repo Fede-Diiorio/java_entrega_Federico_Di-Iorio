@@ -17,7 +17,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @Entity
 @Table(name = "products")
 public class Product {
@@ -53,12 +63,6 @@ public class Product {
 	@JsonIgnore
 	private List<ProductCart> productCart = new ArrayList<>();
 
-
-	// Constructor
-	public Product() {
-		super();
-	}
-
 	public Product(String name, String description, String code, int stock, double price) {
 		super();
 		validatePrice(price);
@@ -70,78 +74,9 @@ public class Product {
 		this.price = price;
 	}
 
-//	public Product(String name, String image, String description, int stock, double price, Category category,
-//			List<Ticket> tickets, List<ProductCart> productCart) {
-//		super();
-//		this.name = name;
-//		this.image = image;
-//		this.description = description;
-//		this.stock = stock;
-//		this.price = price;
-//		this.category = category;
-//		this.productCart = productCart;
-//	}
-
-	// GET y SET
-	public long getId() {
-		return id;
-	}
-
-	public List<ProductCart> getProductCart() {
-		return productCart;
-	}
-
-	public void setProductCart(List<ProductCart> productCart) {
-		this.productCart = productCart;
-	}
-
-	public Category getCategory() {
-		return category;
-	}
-
-	public void setCategory(Category category) {
-		this.category = category;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public int getStock() {
-		return stock;
-	}
-
 	public void setStock(int stock) {
 		validateStock(stock);
 		this.stock = stock;
-	}
-
-	public double getPrice() {
-		return price;
 	}
 
 	public void setPrice(double price) {
@@ -160,13 +95,6 @@ public class Product {
 		if (price < 1) {
 			throw new IllegalArgumentException("Debe establecer un precio mínimo del, al menos, $1.");
 		}
-	}
-
-	// ToString
-	@Override
-	public String toString() {
-		return "Product [id=" + id + ", description=" + description + ", code=" + code + ", stock=" + stock + ", price="
-				+ price + "]";
 	}
 
 }
