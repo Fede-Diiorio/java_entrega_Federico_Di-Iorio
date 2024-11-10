@@ -9,7 +9,7 @@ Este es un proyecto simple desarrollado en Java con Spring Boot como parte del c
 - **Eclipse** - IDE usado para el desarrollo [varsión 2024-09].
 - **MySQL Workbench** - herramienta para visualizar y gestionar la base de datos [versión 8.0.40].
 
-## Configuración de la base de datos
+## Configuración del proyecto
 La aplicación creará automáticamente tablas en una base de datos llamada **coderhouse**. Asegúrate de que tu servidor MySQL esté corriendo y configurado para aceptar conexiones.
 
 ### 1. Crear la base de datos
