@@ -13,7 +13,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @Entity
 @Table(name = "tickets")
 public class Ticket {
@@ -36,46 +46,4 @@ public class Ticket {
 	@Column(nullable = false, unique = true, updatable = false, length = 35)
 	private String code = UUID.randomUUID().toString().replace("-", "");
 
-	// Constructors
-	public Ticket() {
-	}
-
-	public Ticket(Client client, double total, Cart cart) {
-		this.client = client;
-		this.total = total;
-	}
-
-	// Getters and Setters
-	public long getId() {
-		return id;
-	}
-
-	public Client getClient() {
-		return client;
-	}
-
-	public void setClient(Client client) {
-		this.client = client;
-	}
-
-	public double getTotal() {
-		return total;
-	}
-
-	public void setTotal(double total) {
-		this.total = total;
-	}
-
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	@Override
-	public String toString() {
-		return "Ticket [id=" + id + ", total=" + total + ", createdAt=" + createdAt + ", code=" + code + "]";
-	}
 }

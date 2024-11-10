@@ -9,13 +9,22 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @Table(name = "carts")
 public class Cart {
 
 	// Attributes
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -23,22 +32,4 @@ public class Cart {
 	@OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductCart> products;
 
-
-	// GET y SET
-	public List<ProductCart> getProducts() {
-		return products;
-	}
-
-	public void setProducts(List<ProductCart> products) {
-		this.products = products;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	@Override
-	public String toString() {
-		return "Cart [id=" + id + "]";
-	}
 }

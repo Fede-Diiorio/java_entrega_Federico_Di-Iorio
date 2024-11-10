@@ -13,7 +13,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @Entity
 @Table(name = "categories")
 public class Category {
@@ -33,55 +43,21 @@ public class Category {
 	@JsonIgnore
 	Set<Product> products = new HashSet<Product>();
 
-	// Constructors
-	public Category() {
-		super();
-	}
-
-	public Category(String name) {
-		super();
-		this.name = name;
-	}
-
 	public Category(String name, String slug) {
 		super();
 		this.name = name;
 		this.slug = validateSlug(slug);
 	}
 
-	// GET y SET
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getSlug() {
-		return slug;
-	}
-
 	public void setSlug(String slug) {
 		this.slug = validateSlug(slug);
 	}
 
-	public long getId() {
-		return id;
-	}
-
 	// Methods
-
 	private String validateSlug(String slug) {
 		if (slug == null) {
 			return "sin-categoria";
 		}
 		return slug.toLowerCase().replace(" ", "-");
 	}
-
-	@Override
-	public String toString() {
-		return "Category [id=" + id + ", name=" + name + ", slug=" + slug + "]";
-	}
-
 }
