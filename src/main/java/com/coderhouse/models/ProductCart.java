@@ -2,6 +2,7 @@ package com.coderhouse.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,26 +25,32 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Schema(description = "Modelo de ProductCart")
 @Entity
 @Table(name = "products_carts")
 public class ProductCart {
 
 	// Attributes
+	@Schema(description = "ID del producto agregado en el carrito", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "products_carts_id")
 	private long id;
 
+	@Schema(description = "Cantidad de unidades del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "3")
 	@Column(nullable = false)
 	private int quantity;
 
+	@Schema(description = "Precio del producto multiplicado por la cantidad del mismo", requiredMode = Schema.RequiredMode.REQUIRED, example = "30")
 	@Column(nullable = false)
 	private double price;
 
+	@Schema(description = "ID del producto", example = "1")
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
 
+	@Schema(description = "ID del carrito", example = "1")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cart_id")
 	@JsonIgnore
