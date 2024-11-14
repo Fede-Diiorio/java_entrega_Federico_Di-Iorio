@@ -20,15 +20,12 @@ public class TicketProductService {
 		return ticketProductRepository.findAll();
 	}
 
-	public TicketProduct findById(Long id) {
-		return ticketProductRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Item no encontrado"));
+	public List<TicketProduct> getAllItemsByTicketId(Long ticketId) {
+		return ticketProductRepository.findByTicketId(ticketId);
 	}
 
 	@Transactional
 	public TicketProduct saveTicketDetails(TicketProduct ticketProduct) {
-
 		return ticketProductRepository.save(ticketProduct);
-
 	}
 }

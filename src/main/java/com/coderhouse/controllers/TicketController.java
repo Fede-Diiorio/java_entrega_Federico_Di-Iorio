@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.coderhouse.models.Ticket;
+import com.coderhouse.models.TicketProduct;
+import com.coderhouse.services.TicketProductService;
 import com.coderhouse.services.TicketService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,6 +29,9 @@ public class TicketController {
 
 	@Autowired
 	private TicketService ticketService;
+	
+	@Autowired
+	private TicketProductService ticketProductService;
 
 	@Operation(summary = "Mostrar todos los tickets")
 	@ApiResponses(value = {
@@ -61,5 +66,22 @@ public class TicketController {
 		}
 	}
 
+	@Operation(summary = "Mostrar los productos del tickets por ID")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Detalles del ticket cargados con éxito", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Ticket.class)) }),
+			@ApiResponse(responseCode = "404", description = "\"Detalles del ticket no encontrado según el ID del cliente", content = @Content),
+			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
+	@GetMapping("/{id}")
+	public ResponseEntity<List<TicketProduct>> getTicketDetails(@PathVariable Long id) {
+		try {
+			List<TicketProduct> invoices = ticketProductService.getAllItemsByTicketId(id);
+			return ResponseEntity.ok(invoices);
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.notFound().build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
 	
 }
