@@ -1,71 +1,40 @@
 package com.coderhouse.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Schema(description = "Modelo de ProductDTO")
 public class ProductDTO {
 
+	@Schema(description = "Nombre del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "Remera de Gryffindor")
 	private String name;
+	
+	@Schema(description = "Link de la imagen del producto", example = "https://sitio-de-imagenes.com/imagen-requerida.jpeg")
 	private String image;
+	
+	@Schema(description = "Descripción del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "Una remera de algodón de una de las cuatro casas de Hogwarts")
 	private String description;
-	private String code;
+	
+	@Schema(description = "Stock del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "50")
 	private int stock;
+	
+	@Schema(description = "Precio del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "10")
 	private double price;
+	
+	@Schema(description = "ID de la categoría del producto", example = "1")
 	private Long category;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public int getStock() {
-		return stock;
-	}
 
 	public void setStock(int stock) {
 		validateStock(stock);
 		this.stock = stock;
 	}
 
-	public double getPrice() {
-		return price;
-	}
-
 	public void setPrice(double price) {
 		validatePrice(price);
 		this.price = price;
-	}
-
-	public Long getCategory() {
-		return category;
-	}
-
-	public void setCategory(Long category) {
-		this.category = category;
 	}
 
 	// Methods

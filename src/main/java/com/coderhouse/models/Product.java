@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,33 +29,42 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Schema(description = "Modelo de Product")
 @Entity
 @Table(name = "products")
 public class Product {
 
 	// Attributes
+	@Schema(description = "ID del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	@Schema(description = "Nombre del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "Remera de Gryffindor")
 	@Column(nullable = false, length = 50)
 	private String name;
 
+	@Schema(description = "Precio del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "10")
 	@Column(nullable = false)
 	private double price;
 
+	@Schema(description = "Link de la imagen del producto", example = "https://sitio-de-imagenes.com/imagen-requerida.jpeg")
 	@Column(length = 200)
 	private String image;
 
+	@Schema(description = "Descripción del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "Una remera de algodón de una de las cuatro casas de Hogwarts")
 	@Column(nullable = false, length = 250)
 	private String description;
 
+	@Schema(description = "Código único del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "2ecb06e11d5c4a988f9171c669eaf56e")
 	@Column(unique = true, nullable = false, length = 50)
 	private String code = UUID.randomUUID().toString().replace("-", "");
 
+	@Schema(description = "Stock del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "50")
 	@Column(nullable = false)
 	private int stock;
 
+	@Schema(description = "Nombre de la categoría del producto", example = "remera")
 	@ManyToOne
 	@JoinColumn(name = "category")
 	private Category category;

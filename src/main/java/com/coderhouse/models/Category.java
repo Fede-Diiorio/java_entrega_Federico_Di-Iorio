@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,21 +25,26 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Schema(description = "Modelo de Category")
 @Entity
 @Table(name = "categories")
 public class Category {
 
 	// Attributes
 	@Id
+	@Schema(description = "ID de la categoría", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	@Schema(description = "nombre de la categoría", requiredMode = Schema.RequiredMode.REQUIRED, example = "Varitas mágicas")
 	@Column(nullable = false, length = 50)
 	private String name;
 
+	@Schema(description = "Abreviativo de la categoría", requiredMode = Schema.RequiredMode.REQUIRED, example = "varita-magica")
 	@Column(length = 30)
 	private String slug;
 
+	@Schema(description = "Lista de productos de la categoría", requiredMode = Schema.RequiredMode.REQUIRED)
 	@OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
 	@JsonIgnore
 	Set<Product> products = new HashSet<Product>();
