@@ -35,7 +35,7 @@ import lombok.ToString;
 @Table(name = "tickets")
 public class Ticket {
 
-	//Attributes
+	// Attributes
 	@Schema(description = "ID del ticket", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +46,7 @@ public class Ticket {
 	@JoinColumn(name = "client_id", referencedColumnName = "id")
 	@JsonIgnore
 	private Client client;
-	
+
 	@OneToMany(mappedBy = "ticket", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<TicketProduct> ticketProduct = new ArrayList<>();
@@ -55,10 +55,10 @@ public class Ticket {
 	@Column(nullable = false)
 	private double total;
 
-	@Schema(description = "Fecha y horario en el que se generó el comprobante", requiredMode = Schema.RequiredMode.REQUIRED, example = "2024-11-10T07:07:02.196345")
+	@Schema(description = "Fecha y horario en el que se generó el comprobante", example = "2024-11-10T07:07:02.196345")
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	@Column(nullable = false, updatable = false)
-	private LocalDateTime createdAt = LocalDateTime.now();
+	@Column(updatable = false)
+	private LocalDateTime createdAt;
 
 	@Schema(description = "Código único del comprobante", requiredMode = Schema.RequiredMode.REQUIRED, example = "2e7c692c409f4e6d969a9faaceafedb8")
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)

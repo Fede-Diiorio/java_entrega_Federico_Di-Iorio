@@ -1,5 +1,6 @@
 package com.coderhouse.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class TicketService {
 	@Autowired
 	private TicketProductService ticketProductServise;
 	
+	@Autowired
+	private DateService dateService;
+	
 	public List<Ticket> getAllTickets() {
 		return ticketRepository.findAll();
 	}
@@ -55,6 +59,13 @@ public class TicketService {
 
 	    Ticket ticket = new Ticket();
 	    ticket.setClient(client);
+	    
+	    LocalDateTime currentDateTime = dateService.getCurrentDateTime();
+        if (currentDateTime == null) {
+            throw new IllegalStateException("No se pudo obtener la fecha actual desde el servicio externo.");
+        }
+
+        ticket.setCreatedAt(currentDateTime);
 	    
 	    for(ProductCart product : products) {
 	        product.getProduct().setStock(product.getProduct().getStock() - product.getQuantity());
