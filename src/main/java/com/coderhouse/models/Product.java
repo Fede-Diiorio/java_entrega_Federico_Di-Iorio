@@ -68,10 +68,10 @@ public class Product {
 	@ManyToOne
 	@JoinColumn(name = "category")
 	private Category category;
-
+	
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonIgnore
-	private List<ProductCart> productCart = new ArrayList<>();
+	private List<TicketProduct> ticketProduct = new ArrayList<TicketProduct>();
 
 	public Product(String name, String description, String code, int stock, double price) {
 		super();
