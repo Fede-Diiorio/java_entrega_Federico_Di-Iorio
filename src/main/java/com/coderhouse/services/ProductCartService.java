@@ -27,17 +27,8 @@ public class ProductCartService {
 	@Autowired
 	private ProductRepository productRepository;
 
-	public List<ProductCart> getAllProductCart() {
-		return productCartRepository.findAll();
-	}
-
 	public List<ProductCart> getAllProductsFromCart(Long cart) {
 		return productCartRepository.findByCartId(cart);
-	}
-
-	public ProductCart findById(Long id) {
-		return productCartRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("El detalle no existe"));
 	}
 
 	@Transactional
@@ -69,23 +60,22 @@ public class ProductCartService {
 
 	}
 
-	public void deleteProductInCart(Long cartId, Long productId) {
-	    Cart cart = cartRepository.findById(cartId)
-	            .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
+	public void deleteProductFromCart(Long cartId, Long productId) {
+		Cart cart = cartRepository.findById(cartId)
+				.orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
 
-	    Product product = productRepository.findById(productId)
-	            .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
+		Product product = productRepository.findById(productId)
+				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
 
-	    Optional<ProductCart> existingProductCart = productCartRepository.findByCartAndProduct(cart, product);
+		Optional<ProductCart> existingProductCart = productCartRepository.findByCartAndProduct(cart, product);
 
-	    if (existingProductCart.isPresent()) {
-	        ProductCart productCart = existingProductCart.get();
-	        productCartRepository.deleteById(productCart.getId());
-	    } else {
-	        throw new IllegalArgumentException("Producto no encontrado en el carrito");
-	    }
+		if (existingProductCart.isPresent()) {
+			ProductCart productCart = existingProductCart.get();
+			productCartRepository.deleteById(productCart.getId());
+		} else {
+			throw new IllegalArgumentException("Producto no encontrado en el carrito");
+		}
 	}
-
 
 	public void deleteProductCartByCartId(long cartId) {
 		productCartRepository.deleteByCartId(cartId);

@@ -11,7 +11,7 @@ public class TimeResponseDTO {
 	 private int hour;
 	 private int minute;
 	 private int seconds;
-	 private int miliSeconds;
+	 private int milliSeconds;
 	 private String dateTime;
 	 private String date;
 	 private String time;

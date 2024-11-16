@@ -42,7 +42,7 @@ public class ProductController {
 	@GetMapping
 	public ResponseEntity<List<Product>> getAllProducts() {
 		try {
-			List<Product> products = productService.getAllProducts();
+			List<Product> products = productService.getAll();
 			return ResponseEntity.ok(products);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -57,7 +57,7 @@ public class ProductController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Product> getProductByid(@PathVariable long id) {
 		try {
-			Product product = productService.findById(id);
+			Product product = productService.getById(id);
 			return ResponseEntity.ok(product);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
@@ -75,7 +75,7 @@ public class ProductController {
 	@PostMapping
 	public ResponseEntity<Product> saveProduct(@RequestBody ProductDTO product) {
 		try {
-			Product createdProduct = productService.saveProduct(product);
+			Product createdProduct = productService.save(product);
 			return ResponseEntity.ok(createdProduct);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -114,7 +114,7 @@ public class ProductController {
 	@PutMapping("{id}")
 	public ResponseEntity<Product> updateProductById(@PathVariable Long id, @RequestBody ProductDTO productDetails) {
 		try {
-			Product updatedProduct = productService.updateProduct(id, productDetails);
+			Product updatedProduct = productService.update(id, productDetails);
 			return ResponseEntity.ok(updatedProduct);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
@@ -132,7 +132,7 @@ public class ProductController {
 	@DeleteMapping("{id}")
 	public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
 		try {
-			productService.deleteProduct(id);
+			productService.delete(id);
 			return ResponseEntity.noContent().build();
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();

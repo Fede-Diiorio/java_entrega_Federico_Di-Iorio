@@ -22,78 +22,102 @@ public class ProductService {
 	@Autowired
 	private CategoryRepository categoryRepository;
 
-	public List<Product> getAllProducts() {
+	public List<Product> getAll() {
 		return productRepository.findAll();
 	}
 
-	public Product findById(Long id) {
-		return productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
+	public Product getById(Long id) {
+		return productRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Producto con ID " + id + " no encontrado."));
 	}
 
 	@Transactional
-	public Product saveProduct(ProductDTO productDTO) {
-		Category category = categoryRepository.findById(productDTO.getCategory())
-				.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
-
-		Product product = new Product();
-		product.setName(productDTO.getName());
-		product.setImage(productDTO.getImage());
-		product.setDescription(productDTO.getDescription());
-		product.setStock(productDTO.getStock());
-		product.setPrice(productDTO.getPrice());
-		product.setCategory(category);
-
-		return productRepository.save(product);
+	public Product save(ProductDTO productDTO) {
+		validateMandatoryFields(productDTO);
+		return productRepository.save(convertToProduct(productDTO, new Product()));
 	}
 
 	@Transactional
-	public Product updateProduct(Long id, ProductDTO productDetails) {
-		Product product = productRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado."));
+	public Product update(Long id, ProductDTO productDTO) {
+		Product product = getById(id);
 
-		product.setPrice(productDetails.getPrice());
-		product.setStock(productDetails.getStock());
+		validatePriceAndStock(productDTO);
 
-		if (productDetails.getName() != null && !productDetails.getName().isEmpty()) {
-			product.setName(productDetails.getName());
-		}
-
-		if (productDetails.getDescription() != null && !productDetails.getDescription().isEmpty()) {
-			product.setDescription(productDetails.getDescription());
-		}
-
-		if (productDetails.getImage() != null && !productDetails.getImage().isEmpty()) {
-			product.setImage(productDetails.getImage());
-		}
-
-		if (productDetails.getCategory() != null) {
-			Category category = categoryRepository.findById(productDetails.getCategory())
-					.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
-			product.setCategory(category);
-		}
-
-		return productRepository.save(product);
-
+		return productRepository.save(convertToProduct(productDTO, product));
 	}
 
 	@Transactional
-	public Product assignCategoryToProduct(Long pid, Long cid) {
-
-		Product product = productRepository.findById(pid)
-				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado."));
-
-		Category category = categoryRepository.findById(cid)
-				.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
-
-		product.setCategory(category);
-		return productRepository.save(product);
-	}
-
-	public void deleteProduct(Long id) {
+	public void delete(Long id) {
 		if (!productRepository.existsById(id)) {
 			throw new IllegalArgumentException("Producto no encontrado.");
 		}
 		productRepository.deleteById(id);
+	}
+
+	@Transactional
+	public Product assignCategoryToProduct(Long productId, Long categoryId) {
+
+		Product product = productRepository.findById(productId)
+				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado."));
+
+		Category category = categoryRepository.findById(categoryId)
+				.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
+
+		if (product.getCategory() != null && product.getCategory().getId() == categoryId.longValue()) {
+			throw new IllegalArgumentException("La categoría ya está asignada al producto.");
+		}
+
+		product.setCategory(category);
+		return productRepository.save(product);
+	}
+
+	private Product convertToProduct(ProductDTO productDTO, Product product) {
+		if (productDTO.getName() != null && !productDTO.getName().isEmpty()) {
+			product.setName(productDTO.getName());
+		}
+
+		if (productDTO.getImage() != null && !productDTO.getImage().isEmpty()) {
+			product.setImage(productDTO.getImage());
+		}
+
+		if (productDTO.getDescription() != null && !productDTO.getDescription().isEmpty()) {
+			product.setDescription(productDTO.getDescription());
+		}
+
+		if (productDTO.getStock() != null) {
+			product.setStock(productDTO.getStock());
+		}
+
+		if (productDTO.getPrice() != null) {
+			product.setPrice(productDTO.getPrice());
+		}
+
+		if (productDTO.getCategory() != null) {
+			Category category = categoryRepository.findById(productDTO.getCategory())
+					.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
+			product.setCategory(category);
+		}
+
+		return product;
+	}
+
+	private void validatePriceAndStock(ProductDTO productDTO) {
+		if (productDTO.getPrice() == null || productDTO.getPrice() < 1) {
+			throw new IllegalArgumentException("Debe establecer un precio mínimo del, al menos, $1.");
+		}
+		if (productDTO.getDescription() == null || productDTO.getDescription().isEmpty()) {
+			throw new IllegalArgumentException("La descripción del producto es obligatoria.");
+		}
+	}
+
+	private void validateMandatoryFields(ProductDTO productDTO) {
+		if (productDTO.getName() == null || productDTO.getName().isEmpty()) {
+			throw new IllegalArgumentException("El nombre del producto es obligatorio.");
+		}
+		if (productDTO.getDescription() == null || productDTO.getDescription().isEmpty()) {
+			throw new IllegalArgumentException("La descripción del producto es obligatoria.");
+		}
+		validatePriceAndStock(productDTO);
 	}
 
 }

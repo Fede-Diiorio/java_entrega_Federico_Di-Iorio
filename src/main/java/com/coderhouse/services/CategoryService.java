@@ -5,53 +5,59 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.coderhouse.interfaces.DAOInterface;
 import com.coderhouse.models.Category;
 import com.coderhouse.repositories.CategoryRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
-public class CategoryService {
+public class CategoryService implements DAOInterface<Category> {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
 	
-	
-
-	public List<Category> getAllCategories() {
+	@Override
+	public List<Category> getAll() {
 		return categoryRepository.findAll();
 	}
 
-	public Category findById(Long id) {
+	@Override
+	public Category getById(Long id) {
 		return categoryRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
 	}
 
+	@Override
 	@Transactional
-	public Category saveCategory(Category category) {
-		if (category.getSlug() == null) {
-	        category.setSlug("sin-categoria");
+	public Category save(Category object) {
+		if (object.getSlug() == null) {
+	        object.setSlug("sin-categoria");
 	    }
-		return categoryRepository.save(category);
+		return categoryRepository.save(object);
 	}
 
+	@Override
 	@Transactional
-	public Category updateCategory(Long id, Category categoryDetails) {
-		Category category = categoryRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
-		category.setName(categoryDetails.getName());
+	public Category update(Long id, Category object) throws Exception {
+		Category category = getById(id);
+		category.setName(object.getName());
 
-		if (categoryDetails.getSlug() != null && !categoryDetails.getSlug().isEmpty()) {
-			category.setSlug(categoryDetails.getSlug());
+		if (object.getSlug() != null && !object.getSlug().isEmpty()) {
+			category.setSlug(object.getSlug());
 		}
 
 		return categoryRepository.save(category);
 	}
 
-	public void deleteCategory(Long id) {
+	@Override
+	@Transactional
+	public void delete(Long id) {
 		if (!categoryRepository.existsById(id)) {
 			throw new IllegalArgumentException("Categoria no encontrada");
 		}
 		categoryRepository.deleteById(id);
+		
 	}
+
 }

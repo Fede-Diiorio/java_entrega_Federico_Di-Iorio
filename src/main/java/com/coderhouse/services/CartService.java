@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.coderhouse.models.Cart;
 import com.coderhouse.repositories.CartRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CartService {
 
@@ -17,25 +19,26 @@ public class CartService {
 	@Autowired
 	private ProductCartService productCartService;
 
-	public List<Cart> getAllCarts() {
+	public List<Cart> getAll() {
 		return cartRepository.findAll();
 	}
 
-	public Cart findById(Long id) {
+	public Cart getById(Long id) {
 		return cartRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
 	}
 
-	public Cart saveCart(Cart cart) {
-		return cartRepository.save(cart);
+	@Transactional
+	public Cart save(Cart object) {
+		return cartRepository.save(object);
 	}
-	
+
+	@Transactional
 	public Cart clearCart(Long id) {
-		Cart cart = cartRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
+		Cart cart = getById(id);
 
 		productCartService.deleteProductCartByCartId(id);
 
 		return cartRepository.save(cart);
 	}
-	
+
 }

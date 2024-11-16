@@ -41,7 +41,7 @@ public class ClientController {
 	@GetMapping
 	public ResponseEntity<List<Client>> getAllClients() {
 		try {
-			List<Client> clients = clientService.getAllClients();
+			List<Client> clients = clientService.getAll();
 			return ResponseEntity.ok(clients);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -57,7 +57,7 @@ public class ClientController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Client> getClientById(@PathVariable long id) {
 		try {
-			Client client = clientService.findById(id);
+			Client client = clientService.getById(id);
 			return ResponseEntity.ok(client);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
@@ -75,7 +75,7 @@ public class ClientController {
 	@PostMapping
 	public ResponseEntity<Client> saveClient(@RequestBody Client client) {
 		try {
-			Client createdClient = clientService.saveClient(client);
+			Client createdClient = clientService.save(client);
 			return ResponseEntity.ok(createdClient);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -94,7 +94,7 @@ public class ClientController {
 	@PutMapping("/{id}")
 	public ResponseEntity<Client> updateClient(@PathVariable Long id, @RequestBody Client client) {
 		try {
-			Client updatedClient = clientService.updateClient(id, client);
+			Client updatedClient = clientService.update(id, client);
 			return ResponseEntity.ok(updatedClient);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
@@ -111,7 +111,7 @@ public class ClientController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
 		try {
-			clientService.deleteClient(id);
+			clientService.delete(id);
 			return ResponseEntity.noContent().build();
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();

@@ -16,16 +16,12 @@ public class TicketProductService {
 	@Autowired
 	private TicketProductRepository ticketProductRepository;
 
-	public List<TicketProduct> getAllItems() {
-		return ticketProductRepository.findAll();
-	}
-
-	public List<TicketProduct> getAllItemsByTicketId(Long ticketId) {
+	public List<TicketProduct> getAllByTicketId(Long ticketId) {
 		return ticketProductRepository.findByTicketId(ticketId);
 	}
 
 	@Transactional
-	public TicketProduct saveTicketDetails(TicketProduct ticketProduct) {
+	public TicketProduct save(TicketProduct ticketProduct) {
 		return ticketProductRepository.save(ticketProduct);
 	}
 }

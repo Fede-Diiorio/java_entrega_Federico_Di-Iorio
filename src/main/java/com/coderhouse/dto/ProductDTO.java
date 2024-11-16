@@ -11,43 +11,20 @@ public class ProductDTO {
 
 	@Schema(description = "Nombre del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "Remera de Gryffindor")
 	private String name;
-	
+
+	@Schema(description = "Precio del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "10")
+	private Double price;
+
 	@Schema(description = "Link de la imagen del producto", example = "https://sitio-de-imagenes.com/imagen-requerida.jpeg")
 	private String image;
-	
+
 	@Schema(description = "Descripción del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "Una remera de algodón de una de las cuatro casas de Hogwarts")
 	private String description;
-	
+
 	@Schema(description = "Stock del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "50")
-	private int stock;
-	
-	@Schema(description = "Precio del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "10")
-	private double price;
-	
+	private Integer stock;
+
 	@Schema(description = "ID de la categoría del producto", example = "1")
 	private Long category;
-
-	public void setStock(int stock) {
-		validateStock(stock);
-		this.stock = stock;
-	}
-
-	public void setPrice(double price) {
-		validatePrice(price);
-		this.price = price;
-	}
-
-	// Methods
-	private void validateStock(int stock) {
-		if (stock < 0) {
-			throw new IllegalArgumentException("El stock no puede ser inferior a cero.");
-		}
-	}
-
-	private void validatePrice(double price) {
-		if (price < 1) {
-			throw new IllegalArgumentException("Debe establecer un precio mínimo del, al menos, $1.");
-		}
-	}
 
 }

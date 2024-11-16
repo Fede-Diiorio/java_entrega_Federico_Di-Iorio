@@ -16,32 +16,24 @@ public class DateService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public TimeResponseDTO getDate() {
-        try {
-            final String URL = "https://timeapi.io/api/Time/current/zone?timeZone=America/Argentina/Buenos_Aires";
-            return restTemplate.getForObject(URL, TimeResponseDTO.class);
-        } catch (RestClientException e) {
-            System.err.println("Error, no se pudo obtener la fecha desde la API externa: " + e.getMessage());
-            return null;
-        }
-    }
-
     public LocalDateTime getCurrentDateTime() {
         try {
             final String URL = "https://timeapi.io/api/Time/current/zone?timeZone=America/Argentina/Buenos_Aires";
             TimeResponseDTO response = restTemplate.getForObject(URL, TimeResponseDTO.class);
 
             if (response != null) {
-                String dateTimeString = String.format("%d-%02d-%02dT%s", 
-                    response.getYear(), 
-                    response.getMonth(), 
-                    response.getDay(), 
-                    response.getTime(),
-                    response.getSeconds(),
-                    response.getMiliSeconds());
-                	
+                String dateTimeString = String.format("%d-%02d-%02dT%02d:%02d:%02d.%03d",
+                    response.getYear(),
+                    response.getMonth(),
+                    response.getDay(),
+                    Integer.parseInt(response.getTime().split(":")[0]), 
+                    Integer.parseInt(response.getTime().split(":")[1]), 
+                    response.getSeconds(), 
+                    response.getMilliSeconds()); 
 
-                return LocalDateTime.parse(dateTimeString, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+
+                return LocalDateTime.parse(dateTimeString, formatter);
             } else {
                 throw new IllegalStateException("Respuesta nula desde la API externa.");
             }
@@ -55,5 +47,6 @@ public class DateService {
 
         return LocalDateTime.now();
     }
+
 }
 
