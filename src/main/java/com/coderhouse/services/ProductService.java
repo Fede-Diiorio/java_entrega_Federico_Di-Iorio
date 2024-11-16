@@ -27,57 +27,23 @@ public class ProductService {
 	}
 
 	public Product getById(Long id) {
-		return productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Producto con ID " + id + " no encontrado."));
+		return productRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Producto con ID " + id + " no encontrado."));
 	}
 
 	@Transactional
 	public Product save(ProductDTO productDTO) {
-		Category category = categoryRepository.findById(productDTO.getCategory())
-				.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
-
-		Product product = new Product();
-		product.setName(productDTO.getName());
-		product.setImage(productDTO.getImage());
-		product.setDescription(productDTO.getDescription());
-		product.setStock(productDTO.getStock());
-		product.setPrice(productDTO.getPrice());
-		product.setCategory(category);
-
-		return productRepository.save(product);
+		validateMandatoryFields(productDTO);
+		return productRepository.save(convertToProduct(productDTO, new Product()));
 	}
 
 	@Transactional
 	public Product update(Long id, ProductDTO productDTO) {
 		Product product = getById(id);
 
-		if (productDTO.getPrice() != null) {
-			product.setPrice(productDTO.getPrice());
-		}
+		validatePriceAndStock(productDTO);
 
-		if (productDTO.getStock() != null) {
-			product.setStock(productDTO.getStock());
-		}
-
-		if (productDTO.getName() != null && !productDTO.getName().isEmpty()) {
-			product.setName(productDTO.getName());
-		}
-
-		if (productDTO.getDescription() != null && !productDTO.getDescription().isEmpty()) {
-			product.setDescription(productDTO.getDescription());
-		}
-
-		if (productDTO.getImage() != null && !productDTO.getImage().isEmpty()) {
-			product.setImage(productDTO.getImage());
-		}
-
-		if (productDTO.getCategory() != null) {
-			Category category = categoryRepository.findById(productDTO.getCategory())
-					.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
-			product.setCategory(category);
-		}
-
-		return productRepository.save(product);
-
+		return productRepository.save(convertToProduct(productDTO, product));
 	}
 
 	@Transactional
@@ -103,6 +69,55 @@ public class ProductService {
 
 		product.setCategory(category);
 		return productRepository.save(product);
+	}
+
+	private Product convertToProduct(ProductDTO productDTO, Product product) {
+		if (productDTO.getName() != null && !productDTO.getName().isEmpty()) {
+			product.setName(productDTO.getName());
+		}
+
+		if (productDTO.getImage() != null && !productDTO.getImage().isEmpty()) {
+			product.setImage(productDTO.getImage());
+		}
+
+		if (productDTO.getDescription() != null && !productDTO.getDescription().isEmpty()) {
+			product.setDescription(productDTO.getDescription());
+		}
+
+		if (productDTO.getStock() != null) {
+			product.setStock(productDTO.getStock());
+		}
+
+		if (productDTO.getPrice() != null) {
+			product.setPrice(productDTO.getPrice());
+		}
+
+		if (productDTO.getCategory() != null) {
+			Category category = categoryRepository.findById(productDTO.getCategory())
+					.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
+			product.setCategory(category);
+		}
+
+		return product;
+	}
+
+	private void validatePriceAndStock(ProductDTO productDTO) {
+		if (productDTO.getPrice() == null || productDTO.getPrice() < 1) {
+			throw new IllegalArgumentException("Debe establecer un precio mínimo del, al menos, $1.");
+		}
+		if (productDTO.getDescription() == null || productDTO.getDescription().isEmpty()) {
+			throw new IllegalArgumentException("La descripción del producto es obligatoria.");
+		}
+	}
+
+	private void validateMandatoryFields(ProductDTO productDTO) {
+		if (productDTO.getName() == null || productDTO.getName().isEmpty()) {
+			throw new IllegalArgumentException("El nombre del producto es obligatorio.");
+		}
+		if (productDTO.getDescription() == null || productDTO.getDescription().isEmpty()) {
+			throw new IllegalArgumentException("La descripción del producto es obligatoria.");
+		}
+		validatePriceAndStock(productDTO);
 	}
 
 }
