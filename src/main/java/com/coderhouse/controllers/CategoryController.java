@@ -40,7 +40,7 @@ public class CategoryController {
 	@GetMapping
 	public ResponseEntity<List<Category>> getAllCategories() {
 		try {
-			List<Category> categories = categoryService.getAllCategories();
+			List<Category> categories = categoryService.getAll();
 			return ResponseEntity.ok(categories);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -56,7 +56,7 @@ public class CategoryController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Category> getCategoryById(@PathVariable long id) {
 		try {
-			Category category = categoryService.findById(id);
+			Category category = categoryService.getById(id);
 			return ResponseEntity.ok(category);
 
 		} catch (IllegalArgumentException e) {
@@ -75,7 +75,7 @@ public class CategoryController {
 	@PostMapping
 	public ResponseEntity<Category> saveCategory(@RequestBody Category category) {
 		try {
-			Category createdCategory = categoryService.saveCategory(category);
+			Category createdCategory = categoryService.save(category);
 			return ResponseEntity.ok(createdCategory);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -94,7 +94,7 @@ public class CategoryController {
 	@PutMapping("/{id}")
 	public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category) {
 		try {
-			Category updatedCategory = categoryService.updateCategory(id, category);
+			Category updatedCategory = categoryService.update(id, category);
 			return ResponseEntity.ok(updatedCategory);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
@@ -111,7 +111,7 @@ public class CategoryController {
 	@DeleteMapping("{id}")
 	public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
 		try {
-			categoryService.deleteCategory(id);
+			categoryService.delete(id);
 			return ResponseEntity.noContent().build();
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();

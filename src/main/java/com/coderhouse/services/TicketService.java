@@ -81,7 +81,7 @@ public class TicketService {
 	    ticket = ticketRepository.save(ticket);
 
 	    for(ProductCart product : products) {
-	        Product findedProduct = productService.findById(product.getProduct().getId());
+	        Product findedProduct = productService.getById(product.getProduct().getId());
 	        
 	        TicketProduct ticketProduct = new TicketProduct();
 	        ticketProduct.setTicket(ticket); 

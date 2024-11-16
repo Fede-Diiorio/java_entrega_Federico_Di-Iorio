@@ -12,6 +12,9 @@ public class ProductDTO {
 	@Schema(description = "Nombre del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "Remera de Gryffindor")
 	private String name;
 
+	@Schema(description = "Precio del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "10")
+	private Double price;
+
 	@Schema(description = "Link de la imagen del producto", example = "https://sitio-de-imagenes.com/imagen-requerida.jpeg")
 	private String image;
 
@@ -19,10 +22,7 @@ public class ProductDTO {
 	private String description;
 
 	@Schema(description = "Stock del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "50")
-	private int stock;
-
-	@Schema(description = "Precio del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "10")
-	private double price;
+	private Integer stock;
 
 	@Schema(description = "ID de la categoría del producto", example = "1")
 	private Long category;

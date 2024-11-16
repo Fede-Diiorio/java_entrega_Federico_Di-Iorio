@@ -69,7 +69,7 @@ public class ProductCartService {
 
 	}
 
-	public void deleteProductInCart(Long cartId, Long productId) {
+	public void deleteProductFromCart(Long cartId, Long productId) {
 	    Cart cart = cartRepository.findById(cartId)
 	            .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
 

@@ -51,7 +51,7 @@ public class CartController {
 	@GetMapping
 	public ResponseEntity<List<Cart>> getAllCarts() {
 		try {
-			List<Cart> carts = cartService.getAllCarts();
+			List<Cart> carts = cartService.getAll();
 
 			return ResponseEntity.ok(carts);
 		} catch (Exception e) {
@@ -66,9 +66,9 @@ public class CartController {
 			@ApiResponse(responseCode = "404", description = "Carrito no encontrado por ID inválido", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@GetMapping("/{id}")
-	public ResponseEntity<Cart> findById(@PathVariable long id) {
+	public ResponseEntity<Cart> getCartById(@PathVariable long id) {
 		try {
-			Cart cart = cartService.findById(id);
+			Cart cart = cartService.getById(id);
 			return ResponseEntity.ok(cart);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
@@ -104,9 +104,9 @@ public class CartController {
 			@ApiResponse(responseCode = "404", description = "Producto o carrito no encontrado según su ID", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@DeleteMapping("/{cartId}/product/{productId}")
-	public ResponseEntity<Void> deleteProductInCart(@PathVariable long cartId, @PathVariable long productId) {
+	public ResponseEntity<Void> deleteProductFromCart(@PathVariable long cartId, @PathVariable long productId) {
 		try {
-			productCartService.deleteProductInCart(cartId, productId);
+			productCartService.deleteProductFromCart(cartId, productId);
 			return ResponseEntity.noContent().build();
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
@@ -143,7 +143,7 @@ public class CartController {
 	public ResponseEntity<Cart> clearCart(@PathVariable Long cartId) {
 		try {
 			cartService.clearCart(cartId);
-			Cart cart = cartService.findById(cartId);
+			Cart cart = cartService.getById(cartId);
 			return ResponseEntity.ok(cart);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();

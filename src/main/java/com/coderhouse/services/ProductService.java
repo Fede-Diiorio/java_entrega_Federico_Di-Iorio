@@ -22,16 +22,16 @@ public class ProductService {
 	@Autowired
 	private CategoryRepository categoryRepository;
 
-	public List<Product> getAllProducts() {
+	public List<Product> getAll() {
 		return productRepository.findAll();
 	}
 
-	public Product findById(Long id) {
-		return productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
+	public Product getById(Long id) {
+		return productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Producto con ID " + id + " no encontrado."));
 	}
 
 	@Transactional
-	public Product saveProduct(ProductDTO productDTO) {
+	public Product save(ProductDTO productDTO) {
 		Category category = categoryRepository.findById(productDTO.getCategory())
 				.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
 
@@ -47,27 +47,31 @@ public class ProductService {
 	}
 
 	@Transactional
-	public Product updateProduct(Long id, ProductDTO productDetails) {
-		Product product = productRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado."));
+	public Product update(Long id, ProductDTO productDTO) {
+		Product product = getById(id);
 
-		product.setPrice(productDetails.getPrice());
-		product.setStock(productDetails.getStock());
-
-		if (productDetails.getName() != null && !productDetails.getName().isEmpty()) {
-			product.setName(productDetails.getName());
+		if (productDTO.getPrice() != null) {
+			product.setPrice(productDTO.getPrice());
 		}
 
-		if (productDetails.getDescription() != null && !productDetails.getDescription().isEmpty()) {
-			product.setDescription(productDetails.getDescription());
+		if (productDTO.getStock() != null) {
+			product.setStock(productDTO.getStock());
 		}
 
-		if (productDetails.getImage() != null && !productDetails.getImage().isEmpty()) {
-			product.setImage(productDetails.getImage());
+		if (productDTO.getName() != null && !productDTO.getName().isEmpty()) {
+			product.setName(productDTO.getName());
 		}
 
-		if (productDetails.getCategory() != null) {
-			Category category = categoryRepository.findById(productDetails.getCategory())
+		if (productDTO.getDescription() != null && !productDTO.getDescription().isEmpty()) {
+			product.setDescription(productDTO.getDescription());
+		}
+
+		if (productDTO.getImage() != null && !productDTO.getImage().isEmpty()) {
+			product.setImage(productDTO.getImage());
+		}
+
+		if (productDTO.getCategory() != null) {
+			Category category = categoryRepository.findById(productDTO.getCategory())
 					.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
 			product.setCategory(category);
 		}
@@ -77,23 +81,28 @@ public class ProductService {
 	}
 
 	@Transactional
-	public Product assignCategoryToProduct(Long pid, Long cid) {
-
-		Product product = productRepository.findById(pid)
-				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado."));
-
-		Category category = categoryRepository.findById(cid)
-				.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
-
-		product.setCategory(category);
-		return productRepository.save(product);
-	}
-
-	public void deleteProduct(Long id) {
+	public void delete(Long id) {
 		if (!productRepository.existsById(id)) {
 			throw new IllegalArgumentException("Producto no encontrado.");
 		}
 		productRepository.deleteById(id);
+	}
+
+	@Transactional
+	public Product assignCategoryToProduct(Long productId, Long categoryId) {
+
+		Product product = productRepository.findById(productId)
+				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado."));
+
+		Category category = categoryRepository.findById(categoryId)
+				.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
+
+		if (product.getCategory() != null && product.getCategory().getId() == categoryId.longValue()) {
+			throw new IllegalArgumentException("La categoría ya está asignada al producto.");
+		}
+
+		product.setCategory(category);
+		return productRepository.save(product);
 	}
 
 }
