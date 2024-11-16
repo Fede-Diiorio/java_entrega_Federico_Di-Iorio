@@ -91,7 +91,7 @@ public class TicketService {
 	        ticketProduct.setSubtotal(product.getPrice());
 	        ticketProduct.setUnitPrice(findedProduct.getPrice());
 
-	        ticketProductServise.saveTicketDetails(ticketProduct);
+	        ticketProductServise.save(ticketProduct);
 	    }
 	    
 	    productCartService.deleteProductCartByCartId(cartId);

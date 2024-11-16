@@ -75,7 +75,7 @@ public class TicketController {
 	@GetMapping("/{id}")
 	public ResponseEntity<List<TicketProduct>> getTicketDetails(@PathVariable Long id) {
 		try {
-			List<TicketProduct> invoices = ticketProductService.getAllItemsByTicketId(id);
+			List<TicketProduct> invoices = ticketProductService.getAllByTicketId(id);
 			return ResponseEntity.ok(invoices);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
