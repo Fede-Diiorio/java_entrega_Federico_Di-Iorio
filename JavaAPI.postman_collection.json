@@ -116,7 +116,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Producto de Pueba ACTUALIZADO\", \r\n    \"image\": \"test.jpg\",\r\n    \"description\": \"Descripción para un producto de pureba generico ACTUALIZADO.\",\r\n    \"stock\": 50,\r\n    \"price\": 500,\r\n    \"category\": 2\r\n}",
+							"raw": "{\r\n    \"name\": \"Producto de Pueba ACTUALIZADO\", \r\n    \"image\": \"test.jpg\",\r\n    \"description\": \"Descripción para un producto de pureba generico ACTUALIZADO.\",\r\n    \"stock\": 50,\r\n    \"price\": 25,\r\n    \"category\": 3\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -124,7 +124,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/products/14",
+							"raw": "http://localhost:8080/api/products/13",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -133,7 +133,7 @@
 							"path": [
 								"api",
 								"products",
-								"14"
+								"13"
 							]
 						}
 					},
@@ -262,6 +262,27 @@
 					"response": []
 				},
 				{
+					"name": "ClearCart",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/carts/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"carts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "GenerateTicket",
 					"request": {
 						"method": "POST",
@@ -278,27 +299,6 @@
 								"carts",
 								"1",
 								"ticket"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "ClearCart",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/carts/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"carts",
-								"1"
 							]
 						}
 					},
@@ -450,6 +450,27 @@
 							"path": [
 								"api",
 								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetTicketDetails",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/tickets/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"tickets",
+								"1"
 							]
 						}
 					},

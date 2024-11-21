@@ -42,14 +42,14 @@ public class TicketService {
 	}
 	
 	public List<Ticket> getAllTicketsByClient(Long id) {
-		return ticketRepository.findByClientId(id);
+		return ticketRepository.findTicketByClientId(id);
 	}
 	
 	@Transactional
 	public Ticket saveTicket(Long cartId) {
 	    List<ProductCart> products = productCartService.getAllProductsFromCart(cartId);
 	    
-	    Client client = clientRepository.findByCartId(cartId);
+	    Client client = clientRepository.findClientByCartId(cartId);
 	    
 	    if (client == null || client.getId() == 0) {
 	        throw new IllegalArgumentException("Invalid client: " + cartId);

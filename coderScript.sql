@@ -7,6 +7,7 @@ SELECT * FROM clients;
 SELECT * FROM products;
 SELECT * FROM products_carts;
 SELECT * FROM tickets;
+SELECT * FROM tickets_products;
 
 INSERT INTO categories (name, slug) VALUES 
 ("Colgantes", "colgante"),

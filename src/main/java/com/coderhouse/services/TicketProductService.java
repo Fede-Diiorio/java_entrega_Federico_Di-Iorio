@@ -17,7 +17,7 @@ public class TicketProductService {
 	private TicketProductRepository ticketProductRepository;
 
 	public List<TicketProduct> getAllByTicketId(Long ticketId) {
-		return ticketProductRepository.findByTicketId(ticketId);
+		return ticketProductRepository.findProductsByTicketId(ticketId);
 	}
 
 	@Transactional
