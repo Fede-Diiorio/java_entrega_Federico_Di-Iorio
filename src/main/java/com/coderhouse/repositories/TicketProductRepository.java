@@ -8,5 +8,5 @@ import com.coderhouse.models.TicketProduct;
 
 public interface TicketProductRepository extends JpaRepository<TicketProduct, Long>{
 
-	List<TicketProduct> findByTicketId(Long ticketId);
+	List<TicketProduct> findProductsByTicketId(Long ticketId);
 }

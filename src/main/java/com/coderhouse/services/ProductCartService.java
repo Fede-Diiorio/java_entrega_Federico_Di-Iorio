@@ -28,7 +28,7 @@ public class ProductCartService {
 	private ProductRepository productRepository;
 
 	public List<ProductCart> getAllProductsFromCart(Long cart) {
-		return productCartRepository.findByCartId(cart);
+		return productCartRepository.findProductsByCartId(cart);
 	}
 
 	@Transactional
@@ -44,7 +44,7 @@ public class ProductCartService {
 		Product product = productRepository.findById(productId)
 				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
 
-		Optional<ProductCart> existingProductCart = productCartRepository.findByCartAndProduct(cart, product);
+		Optional<ProductCart> existingProductCart = productCartRepository.findProductsByCartIdAndProductId(cart, product);
 
 		if (existingProductCart.isPresent()) {
 			ProductCart productCart = existingProductCart.get();
@@ -67,7 +67,7 @@ public class ProductCartService {
 		Product product = productRepository.findById(productId)
 				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
 
-		Optional<ProductCart> existingProductCart = productCartRepository.findByCartAndProduct(cart, product);
+		Optional<ProductCart> existingProductCart = productCartRepository.findProductsByCartIdAndProductId(cart, product);
 
 		if (existingProductCart.isPresent()) {
 			ProductCart productCart = existingProductCart.get();
