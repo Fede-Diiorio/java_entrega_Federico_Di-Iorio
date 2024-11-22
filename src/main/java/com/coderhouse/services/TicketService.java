@@ -40,9 +40,42 @@ public class TicketService {
 	@Autowired
 	private DateService dateService;
 	
-	public List<Ticket> getAllTickets() {
-		return ticketRepository.findAll();
+//	public List<Ticket> getAllTickets() {
+//		return ticketRepository.findAll();
+//	}
+	
+	public List<TicketDTO> getAllTickets() {
+	    List<Ticket> tickets = ticketRepository.findAll();
+
+	    List<TicketDTO> ticketsDTO = tickets.stream().map(ticket -> {
+	        List<TicketProduct> ticketProducts = ticketProductServise.getAllByTicketId(ticket.getId());
+
+	        TicketDTO dto = new TicketDTO();
+	        dto.setClientId(ticket.getClient().getId());
+	        dto.setCode(ticket.getCode());
+	        dto.setCreatedAt(ticket.getCreatedAt());
+	        dto.setTotal(ticket.getTotal());
+
+	        List<TicketProductDTO> productDTOs = ticketProducts.stream()
+	            .map(product -> {
+	                TicketProductDTO productDTO = new TicketProductDTO();
+	                productDTO.setProductName(product.getProductName());
+	                productDTO.setProductId(product.getProduct().getId());
+	                productDTO.setProductPrice(product.getUnitPrice());
+	                productDTO.setQuantity(product.getQuantity());
+	                productDTO.setSubtotal(product.getSubtotal());
+	                return productDTO;
+	            })
+	            .toList();
+
+	        dto.setProducts(productDTOs);
+
+	        return dto;
+	    }).toList();
+
+	    return ticketsDTO;
 	}
+
 	
 	public List<Ticket> getAllTicketsByClient(Long id) {
 		return ticketRepository.findByClientId(id);
@@ -135,7 +168,6 @@ public class TicketService {
 	        TicketProductDTO dto = new TicketProductDTO();
 	        dto.setProductId(product.getProduct().getId());
 	        dto.setProductName(product.getProduct().getName());
-	        dto.setProductCode(product.getProduct().getCode());
 	        dto.setQuantity(product.getQuantity());
 	        dto.setProductPrice(product.getPrice());
 	        dto.setSubtotal(product.getPrice() * product.getQuantity());

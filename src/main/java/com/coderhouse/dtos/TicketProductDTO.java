@@ -8,7 +8,6 @@ import lombok.Setter;
 public class TicketProductDTO {
 
 	private String productName;
-	private String productCode;
 	private Long productId;
 	private double productPrice;
 	private int quantity;

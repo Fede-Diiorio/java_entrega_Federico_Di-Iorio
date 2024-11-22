@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.coderhouse.dtos.TicketDTO;
 import com.coderhouse.models.Ticket;
 import com.coderhouse.models.TicketProduct;
 import com.coderhouse.services.TicketProductService;
@@ -39,9 +40,9 @@ public class TicketController {
 					@Content(mediaType = "application/json", schema = @Schema(implementation = Ticket.class)) }),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@GetMapping
-	public ResponseEntity<List<Ticket>> getAllTickets() {
+	public ResponseEntity<List<TicketDTO>> getAllTickets() {
 		try {
-			List<Ticket> invoices = ticketService.getAllTickets();
+			List<TicketDTO> invoices = ticketService.getAllTickets();
 			return ResponseEntity.ok(invoices);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

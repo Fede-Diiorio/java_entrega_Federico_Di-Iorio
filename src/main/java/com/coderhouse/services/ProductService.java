@@ -102,12 +102,12 @@ public class ProductService {
 	}
 
 	private void validatePriceAndStock(ProductDTO productDTO) {
-		if (productDTO.getPrice() == null || productDTO.getPrice() < 1) {
-			throw new IllegalArgumentException("Debe establecer un precio mínimo del, al menos, $1.");
-		}
-		if (productDTO.getDescription() == null || productDTO.getDescription().isEmpty()) {
-			throw new IllegalArgumentException("La descripción del producto es obligatoria.");
-		}
+	    if (productDTO.getPrice() != null && productDTO.getPrice() < 1) {
+	        throw new IllegalArgumentException("Debe establecer un precio mínimo de al menos $1.");
+	    }
+	    if (productDTO.getStock() != null && productDTO.getStock() < 0) {
+	        throw new IllegalArgumentException("No puede establecer un stock negativo.");
+	    }
 	}
 
 	private void validateMandatoryFields(ProductDTO productDTO) {
@@ -117,7 +117,12 @@ public class ProductService {
 		if (productDTO.getDescription() == null || productDTO.getDescription().isEmpty()) {
 			throw new IllegalArgumentException("La descripción del producto es obligatoria.");
 		}
-		validatePriceAndStock(productDTO);
+		if (productDTO.getPrice() == null || productDTO.getPrice() < 1) {
+			throw new IllegalArgumentException("El precio del producto es obligatorio.");
+		}
+		if (productDTO.getStock() == null || productDTO.getStock() < 0) {
+			throw new IllegalArgumentException("El stock del producto es obligatorio.");
+		}
 	}
 
 }
