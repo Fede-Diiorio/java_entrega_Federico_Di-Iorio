@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.coderhouse.dto.ProductDTO;
 import com.coderhouse.models.Product;
+import com.coderhouse.dtos.ProductDTO;
 import com.coderhouse.models.Category;
 import com.coderhouse.repositories.CategoryRepository;
 import com.coderhouse.repositories.ProductRepository;

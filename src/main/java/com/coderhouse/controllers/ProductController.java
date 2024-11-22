@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.coderhouse.dto.CategoryAssignmentDTO;
-import com.coderhouse.dto.ProductDTO;
+import com.coderhouse.dtos.CategoryAssignmentDTO;
+import com.coderhouse.dtos.ProductDTO;
 import com.coderhouse.models.Product;
 import com.coderhouse.services.ProductService;
 

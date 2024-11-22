@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import com.coderhouse.dto.TimeResponseDTO;
+import com.coderhouse.dtos.TimeResponseDTO;
 
 @Service
 public class DateService {

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.coderhouse.dto.QuantityDTO;
+import com.coderhouse.dtos.QuantityDTO;
 import com.coderhouse.models.Cart;
 import com.coderhouse.models.ProductCart;
 import com.coderhouse.models.Ticket;
