@@ -42,16 +42,10 @@ Para ejecutar el proyecto y generar automáticamente las tablas:
 2. Dirígete al archivo principal de la aplicación (con la anotación `@EntregaCoderApplication`) y ejecútalo.
 3. Al iniciarse, Spring Boot se conectará a la base de datos y generará las tablas configuradas en tus entidades.
 4. Ten en cuenta que puedes ejecutar el código SQL del archivo [CoderScript](https://github.com/Fede-Diiorio/java_entrega_Federico_Di-Iorio/blob/main/coderScript.sql) tanto como para crear la base de datos y, además, insertar algunos registros para poder trabajar con los mismos.
-<<<<<<< HEAD
-5. Hecho todo esto y con la aplicación corriendo podrás ejecutar todos los endpoints, adjuntos en este repositorio, que encontraras en el archivo [JavaAPI](https://github.com/Fede-Diiorio/java_entrega_Federico_Di-Iorio/blob/main/JavaAPI.postman_collection.json).
-6. Si necesitas información extra sobre el funcionamiento de los endpoints puedes acceder a la documentación [swagger](http://localhost:8080/swagger-ui/index.html#/) una vez que tengas el proyecto corriendo.
-7. Pueden ver una expliciación en video [aquí](https://youtu.be/f2WINEGwjkQ).
-=======
 5. Hecho todo esto, ya tendrás la aplicación corriendo podrás ejecutar todos los endpoints, adjuntos en este repositorio, que encontraras en el archivo [JavaAPI](https://github.com/Fede-Diiorio/java_entrega_Federico_Di-Iorio/blob/main/JavaAPI.postman_collection.json).
 6. Si necesitas información extra sobre el funcionamiento de los endpoints puedes acceder a la documentación [swagger](http://localhost:8080/swagger-ui/index.html#/) una vez que tengas el proyecto corriendo.
 7. Puedes ver una expliciación en video [aquí](https://youtu.be/f2WINEGwjkQ).
 8. Funcionamiento de la API [aquí](https://youtu.be/7WGUzEl6wzM).
->>>>>>> redux
 
 ### Notas adicionales
 - Asegúrate de que el puerto y host en `spring.datasource.url` coincidan con tu configuración de MySQL.
