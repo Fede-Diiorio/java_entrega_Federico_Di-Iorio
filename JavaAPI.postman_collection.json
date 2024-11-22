@@ -35,7 +35,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/products/1",
+							"raw": "http://localhost:8080/api/products/7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -44,7 +44,7 @@
 							"path": [
 								"api",
 								"products",
-								"1"
+								"7"
 							]
 						}
 					},
@@ -57,7 +57,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Producto de Pueba\", \r\n    \"image\": \"test.jpg\",\r\n    \"description\": \"Descripción para un producto de pureba generico.\",\r\n    \"stock\": 20,\r\n    \"price\": 50,\r\n    \"category\": 1\r\n}",
+							"raw": "{\r\n    \"name\": \"Producto de Pueba\", \r\n    \"image\": \"test.jpg\",\r\n    \"description\": \"Descripción para un producto de pureba generico.\",\r\n    \"stock\": 20,\r\n    \"price\": 50\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -86,7 +86,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"productId\": 13,\r\n    \"categoryId\": 2\r\n}",
+							"raw": "{\r\n    \"productId\": 13,\r\n    \"categoryId\": 4\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -116,7 +116,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Producto de Pueba ACTUALIZADO\", \r\n    \"image\": \"test.jpg\",\r\n    \"description\": \"Descripción para un producto de pureba generico ACTUALIZADO.\",\r\n    \"stock\": 50,\r\n    \"price\": 25,\r\n    \"category\": 3\r\n}",
+							"raw": "{\r\n    \"name\": \"Producto de Pueba ACTUALIZADO\", \r\n    \"image\": \"test.jpg\",\r\n    \"description\": \"Descripción para un producto de pureba generico. ACTUALIZADA\",\r\n    \"stock\": 25,\r\n    \"price\": 55\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -221,7 +221,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/carts/1/product/1",
+							"raw": "http://localhost:8080/api/carts/1/product/7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -232,7 +232,7 @@
 								"carts",
 								"1",
 								"product",
-								"1"
+								"7"
 							]
 						}
 					},
@@ -244,7 +244,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/carts/1/product/1",
+							"raw": "http://localhost:8080/api/carts/1/product/7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -255,7 +255,7 @@
 								"carts",
 								"1",
 								"product",
-								"1"
+								"7"
 							]
 						}
 					},
@@ -456,7 +456,7 @@
 					"response": []
 				},
 				{
-					"name": "GetTicketDetails",
+					"name": "GetTicketById",
 					"request": {
 						"method": "GET",
 						"header": [],

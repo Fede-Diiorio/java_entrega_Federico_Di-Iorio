@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.coderhouse.dtos.QuantityDTO;
+import com.coderhouse.dtos.TicketDTO;
 import com.coderhouse.models.Cart;
 import com.coderhouse.models.ProductCart;
 import com.coderhouse.models.Ticket;
@@ -114,7 +115,7 @@ public class CartController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-
+	
 	@Operation(summary = "Genera un nuevo ticket y vacia el carrito")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Ticket creado de forma correcta", content = {
@@ -122,9 +123,9 @@ public class CartController {
 			@ApiResponse(responseCode = "404", description = "Carrito no encontrado según su ID o carrito vacio", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@PostMapping("/{cartId}/ticket")
-	public ResponseEntity<Ticket> createTicket(@PathVariable long cartId) {
+	public ResponseEntity<TicketDTO> createTicket(@PathVariable long cartId) {
 		try {
-			Ticket ticket = ticketService.saveTicket(cartId);
+			TicketDTO ticket = ticketService.saveTicket(cartId);
 			return ResponseEntity.ok(ticket);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();

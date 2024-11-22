@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.coderhouse.dtos.TicketDTO;
 import com.coderhouse.models.Ticket;
-import com.coderhouse.models.TicketProduct;
-import com.coderhouse.services.TicketProductService;
 import com.coderhouse.services.TicketService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +30,6 @@ public class TicketController {
 	private TicketService ticketService;
 	
 	@Autowired
-	private TicketProductService ticketProductService;
 
 	@Operation(summary = "Mostrar todos los tickets")
 	@ApiResponses(value = {
@@ -39,9 +37,9 @@ public class TicketController {
 					@Content(mediaType = "application/json", schema = @Schema(implementation = Ticket.class)) }),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@GetMapping
-	public ResponseEntity<List<Ticket>> getAllTickets() {
+	public ResponseEntity<List<TicketDTO>> getAllTickets() {
 		try {
-			List<Ticket> invoices = ticketService.getAllTickets();
+			List<TicketDTO> invoices = ticketService.getAllTickets();
 			return ResponseEntity.ok(invoices);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -55,9 +53,9 @@ public class TicketController {
 			@ApiResponse(responseCode = "404", description = "Tiecket no encontrado según el ID del cliente", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@GetMapping("/client/{id}")
-	public ResponseEntity<List<Ticket>> getAllTicketsByClient(@PathVariable Long id) {
+	public ResponseEntity<List<TicketDTO>> getAllTicketsByClient(@PathVariable Long id) {
 		try {
-			List<Ticket> invoices = ticketService.getAllTicketsByClient(id);
+			List<TicketDTO> invoices = ticketService.getAllTicketsByClient(id);
 			return ResponseEntity.ok(invoices);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
@@ -73,10 +71,10 @@ public class TicketController {
 			@ApiResponse(responseCode = "404", description = "\"Detalles del ticket no encontrado según el ID del cliente", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@GetMapping("/{id}")
-	public ResponseEntity<List<TicketProduct>> getTicketDetails(@PathVariable Long id) {
+	public ResponseEntity<TicketDTO> getTicketById(@PathVariable Long id) {
 		try {
-			List<TicketProduct> invoices = ticketProductService.getAllByTicketId(id);
-			return ResponseEntity.ok(invoices);
+			TicketDTO invoice = ticketService.getTicketById(id);
+			return ResponseEntity.ok(invoice);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
 		} catch (Exception e) {
