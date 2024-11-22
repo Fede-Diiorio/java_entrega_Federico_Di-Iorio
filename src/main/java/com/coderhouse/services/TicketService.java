@@ -76,23 +76,18 @@ public class TicketService {
 	    return ticketsDTO;
 	}
 
-	
 	public List<TicketDTO> getAllTicketsByClient(Long clientId) {
-		// Obtiene los tickets filtrados por el ID del cliente
 	    List<Ticket> tickets = ticketRepository.findByClientId(clientId);
 
-	    // Mapea los tickets a TicketDTOs
 	    List<TicketDTO> ticketsDTO = tickets.stream().map(ticket -> {
 	        List<TicketProduct> ticketProducts = ticketProductServise.getAllByTicketId(ticket.getId());
 
-	        // Crear el DTO principal
 	        TicketDTO dto = new TicketDTO();
 	        dto.setClientId(ticket.getClient().getId());
 	        dto.setCode(ticket.getCode());
 	        dto.setCreatedAt(ticket.getCreatedAt());
 	        dto.setTotal(ticket.getTotal());
 
-	        // Mapea los productos del ticket a TicketProductDTOs
 	        List<TicketProductDTO> productDTOs = ticketProducts.stream()
 	            .map(product -> {
 	                TicketProductDTO productDTO = new TicketProductDTO();
@@ -105,7 +100,6 @@ public class TicketService {
 	            })
 	            .toList();
 
-	        // Asigna la lista de productos al DTO principal
 	        dto.setProducts(productDTOs);
 
 	        return dto;
@@ -114,6 +108,36 @@ public class TicketService {
 	    return ticketsDTO;
 	}
 
+	public TicketDTO getTicketById(Long ticketId) {
+	    Ticket ticket = ticketRepository.findById(ticketId)
+	            .orElseThrow(() -> new IllegalArgumentException("Ticket con ID " + ticketId + " no encontrado."));
+
+	    List<TicketProduct> ticketProducts = ticketProductServise.getAllByTicketId(ticketId);
+
+	    TicketDTO dto = new TicketDTO();
+	    dto.setClientId(ticket.getClient().getId());
+	    dto.setCode(ticket.getCode());
+	    dto.setCreatedAt(ticket.getCreatedAt());
+	    dto.setTotal(ticket.getTotal());
+
+	    List<TicketProductDTO> productDTOs = ticketProducts.stream()
+	        .map(product -> {
+	            TicketProductDTO productDTO = new TicketProductDTO();
+	            productDTO.setProductName(product.getProductName());
+	            productDTO.setProductId(product.getProduct().getId());
+	            productDTO.setProductPrice(product.getUnitPrice());
+	            productDTO.setQuantity(product.getQuantity());
+	            productDTO.setSubtotal(product.getSubtotal());
+	            return productDTO;
+	        })
+	        .toList();
+
+	    dto.setProducts(productDTOs);
+
+	    return dto;
+	}
+
+	
 	@Transactional
 	public TicketDTO saveTicket(Long cartId) {
 	    Client client = validateClient(cartId);
