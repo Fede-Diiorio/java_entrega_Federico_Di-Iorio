@@ -1,11 +1,14 @@
 package com.coderhouse.services;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.coderhouse.dtos.TicketDTO;
+import com.coderhouse.dtos.TicketProductDTO;
 import com.coderhouse.models.Client;
 import com.coderhouse.models.Product;
 import com.coderhouse.models.ProductCart;
@@ -44,10 +47,12 @@ public class TicketService {
 	public List<Ticket> getAllTicketsByClient(Long id) {
 		return ticketRepository.findByClientId(id);
 	}
-	
+
 	@Transactional
-	public Ticket saveTicket(Long cartId) {
+	public TicketDTO saveTicket(Long cartId) {
 	    List<ProductCart> products = productCartService.getAllProductsFromCart(cartId);
+	    
+	    TicketDTO ticketDTO = new TicketDTO();
 	    
 	    Client client = clientRepository.findByCartId(cartId);
 	    
@@ -58,7 +63,9 @@ public class TicketService {
 	    double adder = 0;
 
 	    Ticket ticket = new Ticket();
+	    
 	    ticket.setClient(client);
+	    ticketDTO.setClientId(client.getId());
 	    
 	    LocalDateTime currentDateTime = dateService.getCurrentDateTime();
         if (currentDateTime == null) {
@@ -66,19 +73,37 @@ public class TicketService {
         }
 
         ticket.setCreatedAt(currentDateTime);
+        ticketDTO.setCreatedAt(currentDateTime);
+        
+        List<TicketProductDTO> productsList = new ArrayList<TicketProductDTO>();
 	    
 	    for(ProductCart product : products) {
 	        product.getProduct().setStock(product.getProduct().getStock() - product.getQuantity());
 	        adder += product.getPrice();
+	        
+	        TicketProductDTO ticketProductDTO = new TicketProductDTO();
+	        ticketProductDTO.setProductName(product.getProduct().getName());
+	        ticketProductDTO.setProductCode(product.getProduct().getCode());
+	        ticketProductDTO.setProductId(product.getProduct().getId());
+	        ticketProductDTO.setProductPrice(product.getPrice());
+	        ticketProductDTO.setQuantity(product.getQuantity());
+	        ticketProductDTO.setSubtotal((product.getPrice() * product.getQuantity()));
+	        
+	        productsList.add(ticketProductDTO);
 	    }
+	    
+	    ticketDTO.setProducts(productsList);
 	    
 	    if(adder == 0) {
 	        throw new IllegalArgumentException("Su carrito se encuentra vacío. No hay nada para facturar");
 	    }
 
 	    ticket.setTotal(adder);
+	    ticketDTO.setTotal(adder);
 	    
 	    ticket = ticketRepository.save(ticket);
+	    
+	    ticketDTO.setCode(ticket.getCode());
 
 	    for(ProductCart product : products) {
 	        Product findedProduct = productService.getById(product.getProduct().getId());
@@ -96,8 +121,6 @@ public class TicketService {
 	    
 	    productCartService.deleteProductCartByCartId(cartId);
 	    
-	    return ticket;
+	    return ticketDTO;
 	}
-
-	
 }
