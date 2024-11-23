@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.coderhouse.dtos.ProductDTO;
+import com.coderhouse.dtos.ProductResponseDTO;
 import com.coderhouse.models.Product;
 import com.coderhouse.models.Category;
 import com.coderhouse.repositories.CategoryRepository;
@@ -22,28 +23,36 @@ public class ProductService {
 	@Autowired
 	private CategoryRepository categoryRepository;
 
-	public List<Product> getAll() {
-		return productRepository.findAll();
+	public List<ProductResponseDTO> getAll() {
+		List<Product> products = productRepository.findAll();
+		return products.stream().map(this::mapToProductResponseDTO).toList();
 	}
 
-	public Product getById(Long id) {
-		return productRepository.findById(id)
+	public ProductResponseDTO getById(Long id) {
+		Product product = productRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Producto con ID " + id + " no encontrado."));
+		return mapToProductResponseDTO(product);
 	}
 
 	@Transactional
-	public Product save(ProductDTO productDTO) {
+	public ProductResponseDTO save(ProductDTO productDTO) {
 		validateMandatoryFields(productDTO);
-		return productRepository.save(convertToProduct(productDTO, new Product()));
+		Product product = new Product();
+		productRepository.save(convertToProduct(productDTO, product));
+
+		return mapToProductResponseDTO(product);
 	}
 
 	@Transactional
-	public Product update(Long id, ProductDTO productDTO) {
-		Product product = getById(id);
+	public ProductResponseDTO update(Long id, ProductDTO productDTO) {
+		Product product = productRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Producto con ID " + id + " no encontrado."));
 
 		validatePriceAndStock(productDTO);
 
-		return productRepository.save(convertToProduct(productDTO, product));
+		productRepository.save(convertToProduct(productDTO, product));
+
+		return mapToProductResponseDTO(product);
 	}
 
 	@Transactional
@@ -55,7 +64,7 @@ public class ProductService {
 	}
 
 	@Transactional
-	public Product assignCategoryToProduct(Long productId, Long categoryId) {
+	public ProductResponseDTO assignCategoryToProduct(Long productId, Long categoryId) {
 
 		Product product = productRepository.findById(productId)
 				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado."));
@@ -68,7 +77,8 @@ public class ProductService {
 		}
 
 		product.setCategory(category);
-		return productRepository.save(product);
+		productRepository.save(product);
+		return mapToProductResponseDTO(product);
 	}
 
 	private Product convertToProduct(ProductDTO productDTO, Product product) {
@@ -95,19 +105,21 @@ public class ProductService {
 		if (productDTO.getCategory() != null) {
 			Category category = categoryRepository.findById(productDTO.getCategory())
 					.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
-			product.setCategory(category);
+			if (category != null) {
+				product.setCategory(category);
+			}
 		}
 
 		return product;
 	}
 
 	private void validatePriceAndStock(ProductDTO productDTO) {
-	    if (productDTO.getPrice() != null && productDTO.getPrice() < 1) {
-	        throw new IllegalArgumentException("Debe establecer un precio mínimo de al menos $1.");
-	    }
-	    if (productDTO.getStock() != null && productDTO.getStock() < 0) {
-	        throw new IllegalArgumentException("No puede establecer un stock negativo.");
-	    }
+		if (productDTO.getPrice() != null && productDTO.getPrice() < 1) {
+			throw new IllegalArgumentException("Debe establecer un precio mínimo de al menos $1.");
+		}
+		if (productDTO.getStock() != null && productDTO.getStock() < 0) {
+			throw new IllegalArgumentException("No puede establecer un stock negativo.");
+		}
 	}
 
 	private void validateMandatoryFields(ProductDTO productDTO) {
@@ -123,6 +135,19 @@ public class ProductService {
 		if (productDTO.getStock() == null || productDTO.getStock() < 0) {
 			throw new IllegalArgumentException("El stock del producto es obligatorio.");
 		}
+	}
+
+	private ProductResponseDTO mapToProductResponseDTO(Product product) {
+		ProductResponseDTO dto = new ProductResponseDTO();
+		dto.setId(product.getId());
+		dto.setName(product.getName());
+		dto.setDescription(product.getDescription());
+		dto.setPrice(product.getPrice());
+		dto.setStock(product.getStock());
+		dto.setImage(product.getImage());
+		dto.setCode(product.getCode());
+		dto.setCategory(product.getCategory() != null ? product.getCategory().getName() : "sin-categoria");
+		return dto;
 	}
 
 }

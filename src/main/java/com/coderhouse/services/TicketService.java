@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.coderhouse.dtos.ProductDTO;
+import com.coderhouse.dtos.ProductResponseDTO;
 import com.coderhouse.dtos.TicketDTO;
 import com.coderhouse.dtos.TicketProductDTO;
+import com.coderhouse.models.Category;
 import com.coderhouse.models.Client;
 import com.coderhouse.models.Product;
 import com.coderhouse.models.ProductCart;
@@ -35,20 +37,19 @@ public class TicketService {
 	private ProductService productService;
 	
 	@Autowired
-	private TicketProductService ticketProductServise;
+	private TicketProductService ticketProductService;
+	
+	@Autowired
+	private CategoryService categoryService;
 	
 	@Autowired
 	private DateService dateService;
-	
-//	public List<Ticket> getAllTickets() {
-//		return ticketRepository.findAll();
-//	}
 	
 	public List<TicketDTO> getAllTickets() {
 	    List<Ticket> tickets = ticketRepository.findAll();
 
 	    List<TicketDTO> ticketsDTO = tickets.stream().map(ticket -> {
-	        List<TicketProduct> ticketProducts = ticketProductServise.getAllByTicketId(ticket.getId());
+	        List<TicketProduct> ticketProducts = ticketProductService.getAllByTicketId(ticket.getId());
 
 	        TicketDTO dto = new TicketDTO();
 	        dto.setClientId(ticket.getClient().getId());
@@ -80,14 +81,14 @@ public class TicketService {
 	    List<Ticket> tickets = ticketRepository.findByClientId(clientId);
 
 	    List<TicketDTO> ticketsDTO = tickets.stream().map(ticket -> {
-	        List<TicketProduct> ticketProducts = ticketProductServise.getAllByTicketId(ticket.getId());
+	        List<TicketProduct> ticketProducts = ticketProductService.getAllByTicketId(ticket.getId());
 
 	        TicketDTO dto = new TicketDTO();
 	        dto.setClientId(ticket.getClient().getId());
 	        dto.setCode(ticket.getCode());
 	        dto.setCreatedAt(ticket.getCreatedAt());
 	        dto.setTotal(ticket.getTotal());
-
+	        
 	        List<TicketProductDTO> productDTOs = ticketProducts.stream()
 	            .map(product -> {
 	                TicketProductDTO productDTO = new TicketProductDTO();
@@ -112,7 +113,7 @@ public class TicketService {
 	    Ticket ticket = ticketRepository.findById(ticketId)
 	            .orElseThrow(() -> new IllegalArgumentException("Ticket con ID " + ticketId + " no encontrado."));
 
-	    List<TicketProduct> ticketProducts = ticketProductServise.getAllByTicketId(ticketId);
+	    List<TicketProduct> ticketProducts = ticketProductService.getAllByTicketId(ticketId);
 
 	    TicketDTO dto = new TicketDTO();
 	    dto.setClientId(ticket.getClient().getId());
@@ -182,35 +183,39 @@ public class TicketService {
 
 	private void updateProductStock(List<ProductCart> products) {
 	    for (ProductCart productCart : products) {
-	        Product product = productService.getById(productCart.getProduct().getId());
+	        ProductResponseDTO product = productService.getById(productCart.getProduct().getId());
+	        
+	        Category category = categoryService.getByName(product.getCategory());
 	        
 	        ProductDTO productDTO = new ProductDTO();
+	        productDTO.setId(product.getId());
 	        productDTO.setName(product.getName());
 	        productDTO.setImage(product.getImage());
 	        productDTO.setDescription(product.getDescription());
 	        productDTO.setStock(product.getStock() - productCart.getQuantity());
 	        productDTO.setPrice(product.getPrice());
 	        if (product.getCategory() != null) {
-	            productDTO.setCategory(product.getCategory().getId());
+	            productDTO.setCategory(category.getId());
 	        }
 
-	        productService.save(productDTO);
+	        productService.update(productDTO.getId(), productDTO);
 	    }
 	}
 
 	private void saveTicketProducts(Ticket ticket, List<ProductCart> products) {
 	    for (ProductCart product : products) {
-	        Product dbProduct = productService.getById(product.getProduct().getId());
+	        ProductResponseDTO dbProduct = productService.getById(product.getProduct().getId());
+	        Product newProduct = product.getProduct();
 
 	        TicketProduct ticketProduct = new TicketProduct();
 	        ticketProduct.setTicket(ticket);
-	        ticketProduct.setProduct(dbProduct);
+	        ticketProduct.setProduct(newProduct);
 	        ticketProduct.setProductName(dbProduct.getName());
 	        ticketProduct.setQuantity(product.getQuantity());
 	        ticketProduct.setSubtotal(product.getPrice() * product.getQuantity());
 	        ticketProduct.setUnitPrice(product.getPrice());
 
-	        ticketProductServise.save(ticketProduct);
+	        ticketProductService.save(ticketProduct);
 	    }
 	}
 

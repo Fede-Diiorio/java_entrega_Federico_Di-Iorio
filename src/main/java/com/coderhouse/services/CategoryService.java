@@ -59,5 +59,10 @@ public class CategoryService implements DAOInterface<Category> {
 		categoryRepository.deleteById(id);
 		
 	}
+	
+	public Category getByName(String categoryName) {
+		return categoryRepository.findByName(categoryName);
+				
+	}
 
 }
