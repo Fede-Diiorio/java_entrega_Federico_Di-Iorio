@@ -188,6 +188,7 @@ public class TicketService {
 	        Category category = categoryService.getByName(product.getCategory());
 	        
 	        ProductDTO productDTO = new ProductDTO();
+	        productDTO.setId(product.getId());
 	        productDTO.setName(product.getName());
 	        productDTO.setImage(product.getImage());
 	        productDTO.setDescription(product.getDescription());
@@ -197,7 +198,7 @@ public class TicketService {
 	            productDTO.setCategory(category.getId());
 	        }
 
-	        productService.save(productDTO);
+	        productService.update(productDTO.getId(), productDTO);
 	    }
 	}
 

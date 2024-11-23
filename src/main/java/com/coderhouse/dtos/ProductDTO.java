@@ -8,6 +8,8 @@ import lombok.Setter;
 @Setter
 @Schema(description = "Modelo de ProductDTO")
 public class ProductDTO {
+	
+	private Long id;
 
 	@Schema(description = "Nombre del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "Remera de Gryffindor")
 	private String name;
