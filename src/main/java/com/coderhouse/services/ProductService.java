@@ -25,53 +25,34 @@ public class ProductService {
 
 	public List<ProductResponseDTO> getAll() {
 		List<Product> products = productRepository.findAll();
-		List<ProductResponseDTO> productsDTO = products.stream().map(product -> {
-			ProductResponseDTO dto = new ProductResponseDTO();
-			dto.setStock(product.getStock());
-			dto.setPrice(product.getPrice());
-			dto.setName(product.getName());
-			dto.setImage(product.getImage());
-			dto.setId(product.getId());
-			dto.setDescription(product.getDescription());
-			dto.setCode(product.getCode());
-			dto.setCategory(product.getCategory().getName());
-			return dto;
-		}).toList();
-
-		return productsDTO;
+		return products.stream().map(this::mapToProductResponseDTO).toList();
 	}
 
 	public ProductResponseDTO getById(Long id) {
 		Product product = productRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Producto con ID " + id + " no encontrado."));
-		
-		ProductResponseDTO productDTO = new ProductResponseDTO();
-		productDTO.setCategory(product.getCategory().getName());
-		productDTO.setCode(product.getCode());
-		productDTO.setDescription(product.getDescription());
-		productDTO.setId(product.getId());
-		productDTO.setImage(product.getImage());
-		productDTO.setName(product.getName());
-		productDTO.setPrice(product.getPrice());
-		productDTO.setStock(product.getStock());
-		
-		return productDTO;
+		return mapToProductResponseDTO(product);
 	}
 
 	@Transactional
-	public Product save(ProductDTO productDTO) {
+	public ProductResponseDTO save(ProductDTO productDTO) {
 		validateMandatoryFields(productDTO);
-		return productRepository.save(convertToProduct(productDTO, new Product()));
+		Product product = new Product();
+		productRepository.save(convertToProduct(productDTO, product));
+
+		return mapToProductResponseDTO(product);
 	}
 
 	@Transactional
-	public Product update(Long id, ProductDTO productDTO) {
+	public ProductResponseDTO update(Long id, ProductDTO productDTO) {
 		Product product = productRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Producto con ID " + id + " no encontrado."));
 
 		validatePriceAndStock(productDTO);
 
-		return productRepository.save(convertToProduct(productDTO, product));
+		productRepository.save(convertToProduct(productDTO, product));
+
+		return mapToProductResponseDTO(product);
 	}
 
 	@Transactional
@@ -83,7 +64,7 @@ public class ProductService {
 	}
 
 	@Transactional
-	public Product assignCategoryToProduct(Long productId, Long categoryId) {
+	public ProductResponseDTO assignCategoryToProduct(Long productId, Long categoryId) {
 
 		Product product = productRepository.findById(productId)
 				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado."));
@@ -96,7 +77,8 @@ public class ProductService {
 		}
 
 		product.setCategory(category);
-		return productRepository.save(product);
+		productRepository.save(product);
+		return mapToProductResponseDTO(product);
 	}
 
 	private Product convertToProduct(ProductDTO productDTO, Product product) {
@@ -123,7 +105,9 @@ public class ProductService {
 		if (productDTO.getCategory() != null) {
 			Category category = categoryRepository.findById(productDTO.getCategory())
 					.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
-			product.setCategory(category);
+			if (category != null) {
+				product.setCategory(category);
+			}
 		}
 
 		return product;
@@ -151,6 +135,19 @@ public class ProductService {
 		if (productDTO.getStock() == null || productDTO.getStock() < 0) {
 			throw new IllegalArgumentException("El stock del producto es obligatorio.");
 		}
+	}
+
+	private ProductResponseDTO mapToProductResponseDTO(Product product) {
+		ProductResponseDTO dto = new ProductResponseDTO();
+		dto.setId(product.getId());
+		dto.setName(product.getName());
+		dto.setDescription(product.getDescription());
+		dto.setPrice(product.getPrice());
+		dto.setStock(product.getStock());
+		dto.setImage(product.getImage());
+		dto.setCode(product.getCode());
+		dto.setCategory(product.getCategory() != null ? product.getCategory().getName() : "sin-categoria");
+		return dto;
 	}
 
 }

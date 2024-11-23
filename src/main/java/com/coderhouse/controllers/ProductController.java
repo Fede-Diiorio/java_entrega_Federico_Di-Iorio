@@ -74,9 +74,9 @@ public class ProductController {
 			@ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@PostMapping
-	public ResponseEntity<Product> saveProduct(@RequestBody ProductDTO product) {
+	public ResponseEntity<ProductResponseDTO> saveProduct(@RequestBody ProductDTO product) {
 		try {
-			Product createdProduct = productService.save(product);
+			ProductResponseDTO createdProduct = productService.save(product);
 			return ResponseEntity.ok(createdProduct);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -93,9 +93,9 @@ public class ProductController {
 			@ApiResponse(responseCode = "404", description = "ID de producto o categoría no encontrado", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@PostMapping("/assign-category")
-	public ResponseEntity<Product> assingCategoryToProduct(@RequestBody CategoryAssignmentDTO assignmentDTO) {
+	public ResponseEntity<ProductResponseDTO> assingCategoryToProduct(@RequestBody CategoryAssignmentDTO assignmentDTO) {
 		try {
-			Product updatedProduct = productService.assignCategoryToProduct(assignmentDTO.getProductId(),
+			ProductResponseDTO updatedProduct = productService.assignCategoryToProduct(assignmentDTO.getProductId(),
 					assignmentDTO.getCategoryId());
 			return ResponseEntity.ok(updatedProduct);
 		} catch (IllegalArgumentException e) {
@@ -113,9 +113,9 @@ public class ProductController {
 			@ApiResponse(responseCode = "404", description = "ID de producto no encontrado", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@PutMapping("{id}")
-	public ResponseEntity<Product> updateProductById(@PathVariable Long id, @RequestBody ProductDTO productDetails) {
+	public ResponseEntity<ProductResponseDTO> updateProductById(@PathVariable Long id, @RequestBody ProductDTO productDetails) {
 		try {
-			Product updatedProduct = productService.update(id, productDetails);
+			ProductResponseDTO updatedProduct = productService.update(id, productDetails);
 			return ResponseEntity.ok(updatedProduct);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
