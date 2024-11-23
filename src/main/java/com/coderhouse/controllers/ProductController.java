@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.coderhouse.dtos.CategoryAssignmentDTO;
 import com.coderhouse.dtos.ProductDTO;
+import com.coderhouse.dtos.ProductResponseDTO;
 import com.coderhouse.models.Product;
 import com.coderhouse.services.ProductService;
 
@@ -40,9 +41,9 @@ public class ProductController {
 					@Content(mediaType = "application/json", schema = @Schema(implementation = Product.class)) }),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@GetMapping
-	public ResponseEntity<List<Product>> getAllProducts() {
+	public ResponseEntity<List<ProductResponseDTO>> getAllProducts() {
 		try {
-			List<Product> products = productService.getAll();
+			List<ProductResponseDTO> products = productService.getAll();
 			return ResponseEntity.ok(products);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -55,9 +56,9 @@ public class ProductController {
 			@ApiResponse(responseCode = "404", description = "Producto no encontrado según su ID", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@GetMapping("/{id}")
-	public ResponseEntity<Product> getProductByid(@PathVariable long id) {
+	public ResponseEntity<ProductResponseDTO> getProductByid(@PathVariable long id) {
 		try {
-			Product product = productService.getById(id);
+			ProductResponseDTO product = productService.getById(id);
 			return ResponseEntity.ok(product);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();

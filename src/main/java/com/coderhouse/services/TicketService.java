@@ -40,10 +40,6 @@ public class TicketService {
 	@Autowired
 	private DateService dateService;
 	
-//	public List<Ticket> getAllTickets() {
-//		return ticketRepository.findAll();
-//	}
-	
 	public List<TicketDTO> getAllTickets() {
 	    List<Ticket> tickets = ticketRepository.findAll();
 

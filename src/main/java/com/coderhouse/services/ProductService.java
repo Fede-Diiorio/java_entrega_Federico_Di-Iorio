@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.coderhouse.dtos.ProductDTO;
+import com.coderhouse.dtos.ProductResponseDTO;
 import com.coderhouse.models.Product;
 import com.coderhouse.models.Category;
 import com.coderhouse.repositories.CategoryRepository;
@@ -22,13 +23,39 @@ public class ProductService {
 	@Autowired
 	private CategoryRepository categoryRepository;
 
-	public List<Product> getAll() {
-		return productRepository.findAll();
+	public List<ProductResponseDTO> getAll() {
+		List<Product> products = productRepository.findAll();
+		List<ProductResponseDTO> productsDTO = products.stream().map(product -> {
+			ProductResponseDTO dto = new ProductResponseDTO();
+			dto.setStock(product.getStock());
+			dto.setPrice(product.getPrice());
+			dto.setName(product.getName());
+			dto.setImage(product.getImage());
+			dto.setId(product.getId());
+			dto.setDescription(product.getDescription());
+			dto.setCode(product.getCode());
+			dto.setCategory(product.getCategory().getName());
+			return dto;
+		}).toList();
+
+		return productsDTO;
 	}
 
-	public Product getById(Long id) {
-		return productRepository.findById(id)
+	public ProductResponseDTO getById(Long id) {
+		Product product = productRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Producto con ID " + id + " no encontrado."));
+		
+		ProductResponseDTO productDTO = new ProductResponseDTO();
+		productDTO.setCategory(product.getCategory().getName());
+		productDTO.setCode(product.getCode());
+		productDTO.setDescription(product.getDescription());
+		productDTO.setId(product.getId());
+		productDTO.setImage(product.getImage());
+		productDTO.setName(product.getName());
+		productDTO.setPrice(product.getPrice());
+		productDTO.setStock(product.getStock());
+		
+		return productDTO;
 	}
 
 	@Transactional
@@ -39,7 +66,8 @@ public class ProductService {
 
 	@Transactional
 	public Product update(Long id, ProductDTO productDTO) {
-		Product product = getById(id);
+		Product product = productRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Producto con ID " + id + " no encontrado."));
 
 		validatePriceAndStock(productDTO);
 
@@ -102,12 +130,12 @@ public class ProductService {
 	}
 
 	private void validatePriceAndStock(ProductDTO productDTO) {
-	    if (productDTO.getPrice() != null && productDTO.getPrice() < 1) {
-	        throw new IllegalArgumentException("Debe establecer un precio mínimo de al menos $1.");
-	    }
-	    if (productDTO.getStock() != null && productDTO.getStock() < 0) {
-	        throw new IllegalArgumentException("No puede establecer un stock negativo.");
-	    }
+		if (productDTO.getPrice() != null && productDTO.getPrice() < 1) {
+			throw new IllegalArgumentException("Debe establecer un precio mínimo de al menos $1.");
+		}
+		if (productDTO.getStock() != null && productDTO.getStock() < 0) {
+			throw new IllegalArgumentException("No puede establecer un stock negativo.");
+		}
 	}
 
 	private void validateMandatoryFields(ProductDTO productDTO) {
