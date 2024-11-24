@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.coderhouse.dtos.CartDTO;
 import com.coderhouse.dtos.QuantityDTO;
 import com.coderhouse.dtos.TicketDTO;
 import com.coderhouse.models.Cart;
-import com.coderhouse.models.ProductCart;
 import com.coderhouse.models.Ticket;
 import com.coderhouse.services.CartService;
 import com.coderhouse.services.ProductCartService;
@@ -50,9 +50,9 @@ public class CartController {
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content)
 	})
 	@GetMapping
-	public ResponseEntity<List<Cart>> getAllCarts() {
+	public ResponseEntity<List<CartDTO>> getAllCarts() {
 		try {
-			List<Cart> carts = cartService.getAll();
+			List<CartDTO> carts = cartService.getAll();
 
 			return ResponseEntity.ok(carts);
 		} catch (Exception e) {
@@ -67,9 +67,9 @@ public class CartController {
 			@ApiResponse(responseCode = "404", description = "Carrito no encontrado por ID inválido", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@GetMapping("/{id}")
-	public ResponseEntity<Cart> getCartById(@PathVariable long id) {
+	public ResponseEntity<CartDTO> getCartById(@PathVariable long id) {
 		try {
-			Cart cart = cartService.getById(id);
+			CartDTO cart = cartService.getById(id);
 			return ResponseEntity.ok(cart);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
@@ -85,11 +85,11 @@ public class CartController {
 			@ApiResponse(responseCode = "404", description = "Producto o carrito no encontrado según su ID", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@PostMapping("/{cartId}/product/{productId}")
-	public ResponseEntity<ProductCart> addProductToCart(@PathVariable long cartId, @PathVariable long productId,
+	public ResponseEntity<CartDTO> addProductToCart(@PathVariable long cartId, @PathVariable long productId,
 			@RequestBody QuantityDTO quantityDTO) {
 		try {
 			int quantity = quantityDTO.getQuantity();
-			ProductCart productCart = productCartService.addProductToCart(cartId, productId, quantity);
+			CartDTO productCart = productCartService.addProductToCart(cartId, productId, quantity);
 			return ResponseEntity.ok(productCart);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
@@ -141,10 +141,10 @@ public class CartController {
 			@ApiResponse(responseCode = "404", description = "Carrito no encontrado según su ID o carrito vacio", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@DeleteMapping("/{cartId}")
-	public ResponseEntity<Cart> clearCart(@PathVariable Long cartId) {
+	public ResponseEntity<CartDTO> clearCart(@PathVariable Long cartId) {
 		try {
 			cartService.clearCart(cartId);
-			Cart cart = cartService.getById(cartId);
+			CartDTO cart = cartService.getById(cartId);
 			return ResponseEntity.ok(cart);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
