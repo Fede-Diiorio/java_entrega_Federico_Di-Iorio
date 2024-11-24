@@ -33,6 +33,11 @@ public class ProductService {
 				.orElseThrow(() -> new IllegalArgumentException("Producto con ID " + id + " no encontrado."));
 		return mapToProductResponseDTO(product);
 	}
+	
+	public Product getProductById(Long id) {
+		return productRepository.findById(id)
+		.orElseThrow(() -> new IllegalArgumentException("Producto con ID " + id + " no encontrado."));
+	}
 
 	@Transactional
 	public ProductResponseDTO save(ProductDTO productDTO) {
