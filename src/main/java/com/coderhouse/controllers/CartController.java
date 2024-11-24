@@ -17,7 +17,6 @@ import com.coderhouse.dtos.CartDTO;
 import com.coderhouse.dtos.QuantityDTO;
 import com.coderhouse.dtos.TicketDTO;
 import com.coderhouse.models.Cart;
-import com.coderhouse.models.Ticket;
 import com.coderhouse.services.CartService;
 import com.coderhouse.services.ProductCartService;
 import com.coderhouse.services.TicketService;
@@ -46,7 +45,7 @@ public class CartController {
 	@Operation(summary = "Mostrar todos los carritos")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Carritos encontrados con exito", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = Cart.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = CartDTO.class)) }),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content)
 	})
 	@GetMapping
@@ -63,7 +62,7 @@ public class CartController {
 	@Operation(summary = "Econtrar carrito por ID")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Carrito encontrado con éxito", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = Cart.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = CartDTO.class)) }),
 			@ApiResponse(responseCode = "404", description = "Carrito no encontrado por ID inválido", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@GetMapping("/{id}")
@@ -81,7 +80,7 @@ public class CartController {
 	@Operation(summary = "Agrega un producto al carrito")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Producto agregado con éxito", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = Cart.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = CartDTO.class)) }),
 			@ApiResponse(responseCode = "404", description = "Producto o carrito no encontrado según su ID", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@PostMapping("/{cartId}/product/{productId}")
@@ -119,7 +118,7 @@ public class CartController {
 	@Operation(summary = "Genera un nuevo ticket y vacia el carrito")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Ticket creado de forma correcta", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = Ticket.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = TicketDTO.class)) }),
 			@ApiResponse(responseCode = "404", description = "Carrito no encontrado según su ID o carrito vacio", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@PostMapping("/{cartId}/ticket")
@@ -137,7 +136,7 @@ public class CartController {
 	@Operation(summary = "Vaciar el carrito por ID")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Carrito vaciado exitosamente", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = Cart.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = CartDTO.class)) }),
 			@ApiResponse(responseCode = "404", description = "Carrito no encontrado según su ID o carrito vacio", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@DeleteMapping("/{cartId}")

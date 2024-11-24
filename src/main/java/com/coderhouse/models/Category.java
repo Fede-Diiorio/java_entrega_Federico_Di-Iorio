@@ -55,9 +55,6 @@ public class Category {
 
 	// Methods
 	private String validateSlug(String slug) {
-		if (slug == null) {
-			return "sin-categoria";
-		}
 		return slug.toLowerCase().replace(" ", "-");
 	}
 }

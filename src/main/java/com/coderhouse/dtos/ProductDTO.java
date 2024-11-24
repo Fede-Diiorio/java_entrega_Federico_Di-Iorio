@@ -9,6 +9,7 @@ import lombok.Setter;
 @Schema(description = "Modelo de ProductDTO")
 public class ProductDTO {
 	
+	@Schema(description = "ID del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
 	private Long id;
 
 	@Schema(description = "Nombre del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "Remera de Gryffindor")

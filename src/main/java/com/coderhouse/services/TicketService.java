@@ -52,6 +52,7 @@ public class TicketService {
 	        List<TicketProduct> ticketProducts = ticketProductService.getAllByTicketId(ticket.getId());
 
 	        TicketDTO dto = new TicketDTO();
+	        dto.setId(ticket.getId());
 	        dto.setClientId(ticket.getClient().getId());
 	        dto.setCode(ticket.getCode());
 	        dto.setCreatedAt(ticket.getCreatedAt());
@@ -84,6 +85,7 @@ public class TicketService {
 	        List<TicketProduct> ticketProducts = ticketProductService.getAllByTicketId(ticket.getId());
 
 	        TicketDTO dto = new TicketDTO();
+	        dto.setId(ticket.getId());
 	        dto.setClientId(ticket.getClient().getId());
 	        dto.setCode(ticket.getCode());
 	        dto.setCreatedAt(ticket.getCreatedAt());
@@ -116,6 +118,7 @@ public class TicketService {
 	    List<TicketProduct> ticketProducts = ticketProductService.getAllByTicketId(ticketId);
 
 	    TicketDTO dto = new TicketDTO();
+	    dto.setId(ticket.getId());
 	    dto.setClientId(ticket.getClient().getId());
 	    dto.setCode(ticket.getCode());
 	    dto.setCreatedAt(ticket.getCreatedAt());
@@ -221,6 +224,7 @@ public class TicketService {
 
 	private TicketDTO convertToTicketDTO(Ticket ticket, List<ProductOnCartDTO> products) {
 	    TicketDTO ticketDTO = new TicketDTO();
+	    ticketDTO.setId(ticket.getId());
 	    ticketDTO.setClientId(ticket.getClient().getId());
 	    ticketDTO.setCreatedAt(ticket.getCreatedAt());
 	    ticketDTO.setCode(ticket.getCode());

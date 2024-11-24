@@ -31,9 +31,6 @@ public class CategoryService implements DAOInterface<Category> {
 	@Override
 	@Transactional
 	public Category save(Category object) {
-		if (object.getSlug() == null) {
-	        object.setSlug("sin-categoria");
-	    }
 		return categoryRepository.save(object);
 	}
 

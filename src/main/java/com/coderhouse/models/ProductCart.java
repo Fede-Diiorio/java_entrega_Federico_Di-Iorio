@@ -38,12 +38,12 @@ public class ProductCart {
 	@Column(nullable = false)
 	private double price;
 
-	@Schema(description = "ID del producto", example = "1")
+	@Schema(description = "ID del producto")
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
 
-	@Schema(description = "ID del carrito", example = "1")
+	@Schema(description = "ID del carrito")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cart_id")
 	@JsonIgnore

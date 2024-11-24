@@ -58,7 +58,7 @@ public class Product {
 	@Column(nullable = false)
 	private int stock;
 
-	@Schema(description = "Nombre de la categoría del producto", example = "remera")
+	@Schema(description = "Nombre de la categoría del producto")
 	@ManyToOne
 	@JoinColumn(name = "category")
 	private Category category;
