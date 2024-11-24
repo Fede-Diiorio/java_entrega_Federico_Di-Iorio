@@ -27,16 +27,15 @@ public class ProductService {
 		List<Product> products = productRepository.findAll();
 		return products.stream().map(this::mapToProductResponseDTO).toList();
 	}
-
-	public ProductResponseDTO getById(Long id) {
-		Product product = productRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Producto con ID " + id + " no encontrado."));
-		return mapToProductResponseDTO(product);
-	}
 	
 	public Product getProductById(Long id) {
 		return productRepository.findById(id)
 		.orElseThrow(() -> new IllegalArgumentException("Producto con ID " + id + " no encontrado."));
+	}
+
+	public ProductResponseDTO getById(Long id) {
+		Product product = getProductById(id);
+		return mapToProductResponseDTO(product);
 	}
 
 	@Transactional
@@ -50,8 +49,7 @@ public class ProductService {
 
 	@Transactional
 	public ProductResponseDTO update(Long id, ProductDTO productDTO) {
-		Product product = productRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Producto con ID " + id + " no encontrado."));
+		Product product = getProductById(id);
 
 		validatePriceAndStock(productDTO);
 
@@ -71,8 +69,7 @@ public class ProductService {
 	@Transactional
 	public ProductResponseDTO assignCategoryToProduct(Long productId, Long categoryId) {
 
-		Product product = productRepository.findById(productId)
-				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado."));
+		Product product = getProductById(categoryId);
 
 		Category category = categoryRepository.findById(categoryId)
 				.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));

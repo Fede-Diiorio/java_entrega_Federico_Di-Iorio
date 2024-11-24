@@ -35,7 +35,7 @@ public class Ticket {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Schema(description = "ID del cliente", example = "1")
+	@Schema(description = "ID del cliente")
 	@ManyToOne
 	@JoinColumn(name = "client_id", referencedColumnName = "id")
 	@JsonIgnore

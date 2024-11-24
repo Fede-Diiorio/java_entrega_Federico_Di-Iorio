@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.coderhouse.dtos.TicketDTO;
-import com.coderhouse.models.Ticket;
 import com.coderhouse.services.TicketService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,8 +32,8 @@ public class TicketController {
 
 	@Operation(summary = "Mostrar todos los tickets")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Tickets cargados con éxito", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = Ticket.class)) }),
+			@ApiResponse(responseCode = "200", description = "Todos los tickets cargados con éxito", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = TicketDTO.class)) }),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@GetMapping
 	public ResponseEntity<List<TicketDTO>> getAllTickets() {
@@ -48,8 +47,8 @@ public class TicketController {
 
 	@Operation(summary = "Mostrar tickets por ID de cliente")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Tickets cargados con éxito", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = Ticket.class)) }),
+			@ApiResponse(responseCode = "200", description = "Tickets del cliente cargados con éxito", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = TicketDTO.class)) }),
 			@ApiResponse(responseCode = "404", description = "Tiecket no encontrado según el ID del cliente", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@GetMapping("/client/{id}")
@@ -64,10 +63,10 @@ public class TicketController {
 		}
 	}
 
-	@Operation(summary = "Mostrar los productos del tickets por ID")
+	@Operation(summary = "Mostrar un ticket segú su ID")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Detalles del ticket cargados con éxito", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = Ticket.class)) }),
+			@ApiResponse(responseCode = "200", description = "Ticket cargado con éxito", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = TicketDTO.class)) }),
 			@ApiResponse(responseCode = "404", description = "\"Detalles del ticket no encontrado según el ID del cliente", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@GetMapping("/{id}")

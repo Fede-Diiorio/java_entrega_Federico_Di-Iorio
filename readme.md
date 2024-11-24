@@ -46,6 +46,7 @@ Para ejecutar el proyecto y generar automáticamente las tablas:
 6. Si necesitas información extra sobre el funcionamiento de los endpoints puedes acceder a la documentación [swagger](http://localhost:8080/swagger-ui/index.html#/) una vez que tengas el proyecto corriendo.
 7. Puedes ver una expliciación en video [aquí](https://youtu.be/f2WINEGwjkQ).
 8. Funcionamiento de la API [aquí](https://youtu.be/7WGUzEl6wzM).
+9. Link del archivo jar [aquí](https://drive.google.com/drive/folders/1llNhDM68syF4RKHsc4bHWZMZiPnp1nMd).
 
 ### Notas adicionales
 - Asegúrate de que el puerto y host en `spring.datasource.url` coincidan con tu configuración de MySQL.
