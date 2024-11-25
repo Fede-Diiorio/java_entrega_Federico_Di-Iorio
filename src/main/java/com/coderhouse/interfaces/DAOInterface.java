@@ -2,16 +2,15 @@ package com.coderhouse.interfaces;
 
 import java.util.List;
 
-public interface DAOInterface<T> {
+public interface DAOInterface<T, DTO> {
 
-	List<T> getAll();
+    List<DTO> getAll();
 
-	T getById(Long id);
+    DTO getById(Long id);
 
-	T save(T object);
+    DTO save(T object);
 
-	T update(Long id, T object) throws Exception;
+    DTO update(Long id, T object) throws Exception;
 
-	void delete(Long id);
-
+    void delete(Long id);
 }

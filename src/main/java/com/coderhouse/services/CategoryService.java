@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.coderhouse.dtos.CategoryDTO;
 import com.coderhouse.interfaces.DAOInterface;
 import com.coderhouse.models.Category;
 import com.coderhouse.repositories.CategoryRepository;
@@ -12,39 +13,44 @@ import com.coderhouse.repositories.CategoryRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-public class CategoryService implements DAOInterface<Category> {
+public class CategoryService implements DAOInterface<Category, CategoryDTO> {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
-	
+
 	@Override
-	public List<Category> getAll() {
-		return categoryRepository.findAll();
+	public List<CategoryDTO> getAll() {
+		return categoryRepository.findAll().stream().map(this::convertToDTO).toList();
 	}
 
 	@Override
-	public Category getById(Long id) {
-		return categoryRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
-	}
-
-	@Override
-	@Transactional
-	public Category save(Category object) {
-		return categoryRepository.save(object);
+	public CategoryDTO getById(Long id) {
+		Category category = getCategoryById(id);
+		return convertToDTO(category);
 	}
 
 	@Override
 	@Transactional
-	public Category update(Long id, Category object) throws Exception {
-		Category category = getById(id);
-		category.setName(object.getName());
+	public CategoryDTO save(Category object) {
+		Category savedCategory = categoryRepository.save(object);
+		return convertToDTO(savedCategory);
+	}
+
+	@Override
+	@Transactional
+	public CategoryDTO update(Long id, Category object) throws Exception {
+		Category category = getCategoryById(id);
+
+		if (object.getName() != null && !object.getName().isEmpty()) {
+			category.setName(object.getName());
+		}
 
 		if (object.getSlug() != null && !object.getSlug().isEmpty()) {
 			category.setSlug(object.getSlug());
 		}
 
-		return categoryRepository.save(category);
+		Category updatedCategory = categoryRepository.save(category);
+		return convertToDTO(updatedCategory);
 	}
 
 	@Override
@@ -54,12 +60,21 @@ public class CategoryService implements DAOInterface<Category> {
 			throw new IllegalArgumentException("Categoria no encontrada");
 		}
 		categoryRepository.deleteById(id);
-		
+
 	}
-	
+
+	public Category getCategoryById(Long id) {
+		return categoryRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
+	}
+
 	public Category getByName(String categoryName) {
 		return categoryRepository.findByName(categoryName);
-				
+
+	}
+
+	private CategoryDTO convertToDTO(Category category) {
+		return new CategoryDTO(category.getId(), category.getName(), category.getSlug());
 	}
 
 }

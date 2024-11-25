@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.coderhouse.dtos.CategoryDTO;
 import com.coderhouse.models.Category;
 import com.coderhouse.services.CategoryService;
 
@@ -35,12 +36,12 @@ public class CategoryController {
 	@Operation(summary = "Mostrar todas las categorías")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Categorías encontradas con éxito", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = Category.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = CategoryDTO.class)) }),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@GetMapping
-	public ResponseEntity<List<Category>> getAllCategories() {
+	public ResponseEntity<List<CategoryDTO>> getAllCategories() {
 		try {
-			List<Category> categories = categoryService.getAll();
+			List<CategoryDTO> categories = categoryService.getAll();
 			return ResponseEntity.ok(categories);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -50,13 +51,13 @@ public class CategoryController {
 	@Operation(summary = "Mostrar categoría por ID")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Categoría encontrada con éxito", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = Category.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = CategoryDTO.class)) }),
 			@ApiResponse(responseCode = "404", description = "Categoría no encontrada según su ID", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@GetMapping("/{id}")
-	public ResponseEntity<Category> getCategoryById(@PathVariable long id) {
+	public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable long id) {
 		try {
-			Category category = categoryService.getById(id);
+			CategoryDTO category = categoryService.getById(id);
 			return ResponseEntity.ok(category);
 
 		} catch (IllegalArgumentException e) {
@@ -69,13 +70,13 @@ public class CategoryController {
 	@Operation(summary = "Crear una nueva categoría")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Categoría creada con éxito", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = Category.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = CategoryDTO.class)) }),
 			@ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@PostMapping
-	public ResponseEntity<Category> saveCategory(@RequestBody Category category) {
+	public ResponseEntity<CategoryDTO> saveCategory(@RequestBody Category category) {
 		try {
-			Category createdCategory = categoryService.save(category);
+			CategoryDTO createdCategory = categoryService.save(category);
 			return ResponseEntity.ok(createdCategory);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -87,14 +88,14 @@ public class CategoryController {
 	@Operation(summary = "Actualizar una categoría según si ID")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Categoría actualizada con éxito", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = Category.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = CategoryDTO.class)) }),
 			@ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Categoría no encontrada según ID", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@PutMapping("/{id}")
-	public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category) {
+	public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id, @RequestBody Category category) {
 		try {
-			Category updatedCategory = categoryService.update(id, category);
+			CategoryDTO updatedCategory = categoryService.update(id, category);
 			return ResponseEntity.ok(updatedCategory);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
