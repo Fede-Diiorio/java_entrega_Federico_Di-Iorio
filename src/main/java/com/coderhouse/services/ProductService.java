@@ -27,10 +27,10 @@ public class ProductService {
 		List<Product> products = productRepository.findAll();
 		return products.stream().map(this::mapToProductResponseDTO).toList();
 	}
-	
+
 	public Product getProductById(Long id) {
 		return productRepository.findById(id)
-		.orElseThrow(() -> new IllegalArgumentException("Producto con ID " + id + " no encontrado."));
+				.orElseThrow(() -> new IllegalArgumentException("Producto con ID " + id + " no encontrado."));
 	}
 
 	public ProductResponseDTO getById(Long id) {
