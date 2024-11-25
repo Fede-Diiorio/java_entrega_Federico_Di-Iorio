@@ -44,7 +44,7 @@ public class Client {
 	@Column(nullable = false, unique = true, length = 11)
 	private String docnumber;
 
-	@Schema(description = "ID del carrito del cliente", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+	@Schema(description = "ID del carrito del cliente", requiredMode = Schema.RequiredMode.REQUIRED)
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "cart_id", nullable = false)
 	private Cart cart;

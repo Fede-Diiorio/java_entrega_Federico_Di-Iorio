@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.coderhouse.dtos.ClientDTO;
 import com.coderhouse.interfaces.DAOInterface;
 import com.coderhouse.models.Cart;
 import com.coderhouse.models.Client;
@@ -14,58 +15,69 @@ import com.coderhouse.repositories.ClientRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-public class ClientService implements DAOInterface<Client>{
-	
+public class ClientService implements DAOInterface<Client, ClientDTO> {
+
 	@Autowired
 	private ClientRepository clientRepository;
-	
+
 	@Autowired
 	private CartRepository cartRepository;
-	
-	@Override
-	public List<Client> getAll() {
-		return clientRepository.findAll();
+
+	public Client getClientById(Long id) {
+		return clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("El cliente no existe"));
 	}
 
 	@Override
-	public Client getById(Long id) {
-		return clientRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("El cliente no existe"));
+	public List<ClientDTO> getAll() {
+		return clientRepository.findAll().stream().map(this::convertToDTO).toList();
+	}
+
+	@Override
+	public ClientDTO getById(Long id) {
+		Client client = getClientById(id);
+		return convertToDTO(client);
 	}
 
 	@Override
 	@Transactional
-	public Client save(Client object) {
+	public ClientDTO save(Client object) {
 		Cart cart = new Cart();
 		Cart savedCart = cartRepository.save(cart);
 		object.setCart(savedCart);
-		
-		return clientRepository.save(object);
+
+		Client savedClient = clientRepository.save(object);
+		return convertToDTO(savedClient);
 	}
 
 	@Override
 	@Transactional
-	public Client update(Long id, Client object) throws Exception {
-		Client client = getById(id);
-		
+	public ClientDTO update(Long id, Client object) throws Exception {
+		Client client = getClientById(id);
+
 		client.setName(object.getName());
 		client.setLastname(object.getLastname());
-		
-		if(object.getDocnumber() != null && !object.getDocnumber().isEmpty()) {
+
+		if (object.getDocnumber() != null && !object.getDocnumber().isEmpty()) {
 			client.setDocnumber(object.getDocnumber());
 		}
-		
-		return clientRepository.save(client);
+
+		Client updatedClient = clientRepository.save(client);
+		return convertToDTO(updatedClient);
 	}
 
 	@Override
 	@Transactional
 	public void delete(Long id) {
-		if(!clientRepository.existsById(id)) {
+		if (!clientRepository.existsById(id)) {
 			throw new IllegalArgumentException("Cliente no encontrado");
 		}
 		clientRepository.deleteById(id);
-		
+
+	}
+
+	private ClientDTO convertToDTO(Client client) {
+		return new ClientDTO(client.getId(), client.getName(), client.getLastname(), client.getDocnumber(),
+				client.getCart().getId());
 	}
 
 }
