@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.coderhouse.dtos.ProductDTO;
+import com.coderhouse.dtos.ProductReqDTO;
 import com.coderhouse.dtos.ProductOnCartDTO;
-import com.coderhouse.dtos.ProductResponseDTO;
+import com.coderhouse.dtos.ProductResDTO;
 import com.coderhouse.dtos.TicketDTO;
 import com.coderhouse.dtos.TicketProductDTO;
 import com.coderhouse.models.Category;
@@ -186,11 +186,11 @@ public class TicketService {
 
 	private void updateProductStock(List<ProductOnCartDTO> products) {
 	    for (ProductOnCartDTO productCart : products) {
-	        ProductResponseDTO product = productService.getById(productCart.getId());
+	        ProductResDTO product = productService.getById(productCart.getId());
 	        
 	        Category category = categoryService.getByName(product.getCategory());
 	        
-	        ProductDTO productDTO = new ProductDTO();
+	        ProductReqDTO productDTO = new ProductReqDTO();
 	        productDTO.setId(product.getId());
 	        productDTO.setName(product.getName());
 	        productDTO.setImage(product.getImage());
@@ -207,7 +207,7 @@ public class TicketService {
 
 	private void saveTicketProducts(Ticket ticket, List<ProductOnCartDTO> products) {
 	    for (ProductOnCartDTO product : products) {
-	        ProductResponseDTO dbProduct = productService.getById(product.getId());
+	        ProductResDTO dbProduct = productService.getById(product.getId());
 	        Product newProduct = productService.getProductById(product.getId());
 
 	        TicketProduct ticketProduct = new TicketProduct();

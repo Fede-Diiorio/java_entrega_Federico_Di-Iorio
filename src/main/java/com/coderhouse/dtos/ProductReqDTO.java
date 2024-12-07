@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Schema(description = "Modelo de ProductDTO")
-public class ProductDTO {
+public class ProductReqDTO {
 	
 	@Schema(description = "ID del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
 	private Long id;
@@ -20,6 +20,9 @@ public class ProductDTO {
 
 	@Schema(description = "Link de la imagen del producto", example = "https://sitio-de-imagenes.com/imagen-requerida.jpeg")
 	private String image;
+	
+	@Schema(description = "Link de la imagen del producto", example = "f6a41da776f54551819ab4a0017f42cc")
+	private String code;
 
 	@Schema(description = "Descripción del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "Una remera de algodón de una de las cuatro casas de Hogwarts")
 	private String description;
