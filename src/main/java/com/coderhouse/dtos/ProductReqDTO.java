@@ -10,27 +10,27 @@ import lombok.Setter;
 public class ProductReqDTO {
 	
 	@Schema(description = "ID del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
-	private Long id;
+	private Long productId;
 
 	@Schema(description = "Nombre del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "Remera de Gryffindor")
-	private String name;
+	private String productName;
 
 	@Schema(description = "Precio del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "10")
-	private Double price;
+	private Double productPrice;
 
 	@Schema(description = "Link de la imagen del producto", example = "https://sitio-de-imagenes.com/imagen-requerida.jpeg")
-	private String image;
+	private String productImage;
 	
 	@Schema(description = "Link de la imagen del producto", example = "f6a41da776f54551819ab4a0017f42cc")
-	private String code;
+	private String productCode;
 
 	@Schema(description = "Descripción del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "Una remera de algodón de una de las cuatro casas de Hogwarts")
-	private String description;
+	private String productDescription;
 
 	@Schema(description = "Stock del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "50")
-	private Integer stock;
+	private Integer productStock;
 
 	@Schema(description = "ID de la categoría del producto", example = "1")
-	private Long category;
+	private Long categoryId;
 
 }

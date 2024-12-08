@@ -16,43 +16,43 @@ public class ProductMapper {
 	private CategoryService categoryService;
 
 	public ProductResDTO toDTO(Product product) {
-		ProductResDTO dto = new ProductResDTO();
-		dto.setId(product.getId());
-		dto.setName(product.getName());
-		dto.setDescription(product.getDescription());
-		dto.setPrice(product.getPrice());
-		dto.setStock(product.getStock());
-		dto.setImage(product.getImage());
-		dto.setCode(product.getCode());
-		dto.setCategory(product.getCategory() != null ? product.getCategory().getName() : "sin-categoria");
-		return dto;
+		ProductResDTO productDTO = new ProductResDTO();
+		productDTO.setProductId(product.getId());
+		productDTO.setProductName(product.getName());
+		productDTO.setProductDescription(product.getDescription());
+		productDTO.setProductPrice(product.getPrice());
+		productDTO.setProductStock(product.getStock());
+		productDTO.setProductImage(product.getImage());
+		productDTO.setProductCode(product.getCode());
+		productDTO.setCategoryName(product.getCategory() != null ? product.getCategory().getName() : "sin-categoria");
+		return productDTO;
 	}
 
 	public Product toEntity(ProductReqDTO productDTO, Product existingProduct) {
 		Product product = existingProduct != null ? existingProduct : new Product();
 
-		if (productDTO.getName() != null && !productDTO.getName().isEmpty()) {
-			product.setName(productDTO.getName());
+		if (productDTO.getProductName() != null && !productDTO.getProductName().isEmpty()) {
+			product.setName(productDTO.getProductName());
 		}
 
-		if (productDTO.getImage() != null && !productDTO.getImage().isEmpty()) {
-			product.setImage(productDTO.getImage());
+		if (productDTO.getProductImage() != null && !productDTO.getProductImage().isEmpty()) {
+			product.setImage(productDTO.getProductImage());
 		}
 
-		if (productDTO.getDescription() != null && !productDTO.getDescription().isEmpty()) {
-			product.setDescription(productDTO.getDescription());
+		if (productDTO.getProductDescription() != null && !productDTO.getProductDescription().isEmpty()) {
+			product.setDescription(productDTO.getProductDescription());
 		}
 
-		if (productDTO.getStock() != null) {
-			product.setStock(productDTO.getStock());
+		if (productDTO.getProductStock() != null) {
+			product.setStock(productDTO.getProductStock());
 		}
 
-		if (productDTO.getPrice() != null) {
-			product.setPrice(productDTO.getPrice());
+		if (productDTO.getProductPrice() != null) {
+			product.setPrice(productDTO.getProductPrice());
 		}
 
-		if (productDTO.getCategory() != null) {
-			Category category = categoryService.getCategoryById(productDTO.getCategory());
+		if (productDTO.getCategoryId() != null) {
+			Category category = categoryService.getCategoryById(productDTO.getCategoryId());
 			if (category != null) {
 				product.setCategory(category);
 			}

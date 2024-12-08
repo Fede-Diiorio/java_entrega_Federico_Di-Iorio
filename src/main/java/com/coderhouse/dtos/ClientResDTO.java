@@ -9,19 +9,19 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @Schema(description = "Modelo de ClientDTO")
-public class ClientDTO {
+public class ClientResDTO {
 
 	@Schema(description = "ID del cliente", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
-	private Long id;
+	private Long clientId;
 	
 	@Schema(description = "Nombre del cliente", requiredMode = Schema.RequiredMode.REQUIRED, example = "Federico")
-	private String name;
+	private String clientName;
 	
 	@Schema(description = "Apellido del cliente", requiredMode = Schema.RequiredMode.REQUIRED, example = "Di Iorio")
-	private String lastname;
+	private String clientLastname;
 	
 	@Schema(description = "Documento del cliente", requiredMode = Schema.RequiredMode.REQUIRED, example = "12345678")
-	private String docnumber;
+	private String clentDocnumber;
 	
 	@Schema(description = "ID del carrito del cliente", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
 	private Long cartId;

@@ -35,7 +35,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/products/7",
+							"raw": "http://localhost:8080/api/products/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -44,7 +44,7 @@
 							"path": [
 								"api",
 								"products",
-								"7"
+								"1"
 							]
 						}
 					},
@@ -74,36 +74,6 @@
 							"path": [
 								"api",
 								"products"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "AddCategoryToProduct",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"productId\": 13,\r\n    \"categoryId\": 4\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/api/products/assign-category",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"products",
-								"assign-category"
 							]
 						}
 					},
@@ -357,7 +327,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Carlos\",\r\n    \"lastname\": \"Carloni\",\r\n    \"docnumber\": \"123456789\"\r\n}",
+							"raw": "{\r\n    \"clientName\": \"Carlos\",\r\n    \"clientLastname\": \"Carloni\",\r\n    \"clientDocnumber\": \"123456789\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -386,7 +356,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Carlos Jr\",\r\n    \"lastname\": \"Carloni Carloni\"\r\n}",
+							"raw": "{\r\n    \"clientName\": \"Carlos Jr\",\r\n    \"clientLastname\": \"Carloni Carloni\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -551,7 +521,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Test\",\r\n    \"slug\": \"El Test\"\r\n}",
+							"raw": "{\r\n    \"categoryName\": \"Nueva Categoria\",\r\n    \"categorySlug\": \"Categoria Test\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -580,7 +550,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Categoria\",\r\n    \"slug\": \"nueva Categoria\"\r\n}",
+							"raw": "{\r\n    \"categoryName\": \"Categoria\",\r\n    \"categorySlug\": \"nueva Categoria\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

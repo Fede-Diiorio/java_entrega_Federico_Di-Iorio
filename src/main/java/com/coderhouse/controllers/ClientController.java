@@ -8,8 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.coderhouse.dtos.ClientDTO;
-import com.coderhouse.models.Client;
+import com.coderhouse.dtos.ClientReqDTO;
+import com.coderhouse.dtos.ClientResDTO;
 import com.coderhouse.services.ClientService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,12 +37,12 @@ public class ClientController {
 	@Operation(summary = "Mostrar todos los clientes")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Clientes encontrados con éxito", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = ClientDTO.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = ClientResDTO.class)) }),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@GetMapping
-	public ResponseEntity<List<ClientDTO>> getAllClients() {
+	public ResponseEntity<List<ClientResDTO>> getAllClients() {
 		try {
-			List<ClientDTO> clients = clientService.getAll();
+			List<ClientResDTO> clients = clientService.getAll();
 			return ResponseEntity.ok(clients);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -52,13 +52,13 @@ public class ClientController {
 	@Operation(summary = "Mostrar cliente por ID")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Cliente encontrado con éxito", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = ClientDTO.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = ClientResDTO.class)) }),
 			@ApiResponse(responseCode = "404", description = "Cliente no encontrado según su ID", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@GetMapping("/{id}")
-	public ResponseEntity<ClientDTO> getClientById(@PathVariable long id) {
+	public ResponseEntity<ClientResDTO> getClientById(@PathVariable long id) {
 		try {
-			ClientDTO client = clientService.getById(id);
+			ClientResDTO client = clientService.getById(id);
 			return ResponseEntity.ok(client);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
@@ -70,13 +70,13 @@ public class ClientController {
 	@Operation(summary = "Crear un nuevo cliente")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Cliente creado con éxito", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = ClientDTO.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = ClientResDTO.class)) }),
 			@ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@PostMapping
-	public ResponseEntity<ClientDTO> saveClient(@RequestBody Client client) {
+	public ResponseEntity<ClientResDTO> saveClient(@RequestBody ClientReqDTO client) {
 		try {
-			ClientDTO createdClient = clientService.save(client);
+			ClientResDTO createdClient = clientService.save(client);
 			return ResponseEntity.ok(createdClient);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -88,14 +88,14 @@ public class ClientController {
 	@Operation(summary = "Actualizar cliente por ID")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Cliente actualizado con éxito", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = ClientDTO.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = ClientResDTO.class)) }),
 			@ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Cliente no encontrado según su ID", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@PutMapping("/{id}")
-	public ResponseEntity<ClientDTO> updateClient(@PathVariable Long id, @RequestBody Client client) {
+	public ResponseEntity<ClientResDTO> updateClient(@PathVariable Long id, @RequestBody ClientReqDTO client) {
 		try {
-			ClientDTO updatedClient = clientService.update(id, client);
+			ClientResDTO updatedClient = clientService.update(id, client);
 			return ResponseEntity.ok(updatedClient);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();

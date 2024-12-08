@@ -9,14 +9,14 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @Schema(description = "Modelo de CategoryDTO")
-public class CategoryDTO {
+public class CategoryResDTO {
 
 	@Schema(description = "ID de la categoría", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
-	private Long id;
+	private Long categoryId;
 	
 	@Schema(description = "nombre de la categoría", requiredMode = Schema.RequiredMode.REQUIRED, example = "Varitas mágicas")
-	private String name;
+	private String categoryName;
 	
 	@Schema(description = "Abreviativo de la categoría", requiredMode = Schema.RequiredMode.REQUIRED, example = "varita-magica")
-	private String slug;
+	private String categorySlug;
 }

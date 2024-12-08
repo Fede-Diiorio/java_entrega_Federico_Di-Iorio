@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.coderhouse.dtos.ClientDTO;
+import com.coderhouse.dtos.ClientReqDTO;
+import com.coderhouse.dtos.ClientResDTO;
 import com.coderhouse.interfaces.DAOInterface;
+import com.coderhouse.mapper.ClientMapper;
 import com.coderhouse.models.Cart;
 import com.coderhouse.models.Client;
 import com.coderhouse.repositories.CartRepository;
@@ -15,7 +17,7 @@ import com.coderhouse.repositories.ClientRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-public class ClientService implements DAOInterface<Client, ClientDTO> {
+public class ClientService implements DAOInterface<ClientReqDTO, ClientResDTO> {
 
 	@Autowired
 	private ClientRepository clientRepository;
@@ -23,46 +25,49 @@ public class ClientService implements DAOInterface<Client, ClientDTO> {
 	@Autowired
 	private CartRepository cartRepository;
 
+	@Autowired
+	private ClientMapper clientMapper;
+
 	public Client getClientById(Long id) {
 		return clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("El cliente no existe"));
 	}
 
 	@Override
-	public List<ClientDTO> getAll() {
-		return clientRepository.findAll().stream().map(this::convertToDTO).toList();
+	public List<ClientResDTO> getAll() {
+		return clientRepository.findAll().stream().map(clientMapper::toDTO).toList();
 	}
 
 	@Override
-	public ClientDTO getById(Long id) {
+	public ClientResDTO getById(Long id) {
 		Client client = getClientById(id);
-		return convertToDTO(client);
+		return clientMapper.toDTO(client);
 	}
 
 	@Override
 	@Transactional
-	public ClientDTO save(Client object) {
+	public ClientResDTO save(ClientReqDTO object) {
 		Cart cart = new Cart();
-		Cart savedCart = cartRepository.save(cart);
-		object.setCart(savedCart);
 
-		Client savedClient = clientRepository.save(object);
-		return convertToDTO(savedClient);
+		Cart savedCart = cartRepository.save(cart);
+
+		Client client = clientMapper.toEntity(object, null);
+
+		client.setCart(savedCart);
+
+		clientRepository.save(client);
+
+		return clientMapper.toDTO(client);
 	}
 
 	@Override
 	@Transactional
-	public ClientDTO update(Long id, Client object) throws Exception {
+	public ClientResDTO update(Long id, ClientReqDTO object) throws Exception {
 		Client client = getClientById(id);
 
-		client.setName(object.getName());
-		client.setLastname(object.getLastname());
+		clientRepository.save(clientMapper.toEntity(object, client));
 
-		if (object.getDocnumber() != null && !object.getDocnumber().isEmpty()) {
-			client.setDocnumber(object.getDocnumber());
-		}
+		return clientMapper.toDTO(client);
 
-		Client updatedClient = clientRepository.save(client);
-		return convertToDTO(updatedClient);
 	}
 
 	@Override
@@ -73,11 +78,6 @@ public class ClientService implements DAOInterface<Client, ClientDTO> {
 		}
 		clientRepository.deleteById(id);
 
-	}
-
-	private ClientDTO convertToDTO(Client client) {
-		return new ClientDTO(client.getId(), client.getName(), client.getLastname(), client.getDocnumber(),
-				client.getCart().getId());
 	}
 
 }

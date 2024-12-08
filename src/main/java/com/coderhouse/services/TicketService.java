@@ -188,20 +188,20 @@ public class TicketService {
 	    for (ProductOnCartDTO productCart : products) {
 	        ProductResDTO product = productService.getById(productCart.getId());
 	        
-	        Category category = categoryService.getByName(product.getCategory());
+	        Category category = categoryService.getByName(product.getCategoryName());
 	        
 	        ProductReqDTO productDTO = new ProductReqDTO();
-	        productDTO.setId(product.getId());
-	        productDTO.setName(product.getName());
-	        productDTO.setImage(product.getImage());
-	        productDTO.setDescription(product.getDescription());
-	        productDTO.setStock(product.getStock() - productCart.getQuantity());
-	        productDTO.setPrice(product.getPrice());
-	        if (product.getCategory() != null) {
-	            productDTO.setCategory(category.getId());
+	        productDTO.setProductId(product.getProductId());
+	        productDTO.setProductName(product.getProductName());
+	        productDTO.setProductImage(product.getProductImage());
+	        productDTO.setProductDescription(product.getProductDescription());
+	        productDTO.setProductStock(product.getProductStock() - productCart.getQuantity());
+	        productDTO.setProductPrice(product.getProductPrice());
+	        if (product.getCategoryName() != null) {
+	            productDTO.setCategoryId(category.getId());
 	        }
 
-	        productService.update(productDTO.getId(), productDTO);
+	        productService.update(productDTO.getProductId(), productDTO);
 	    }
 	}
 
@@ -213,7 +213,7 @@ public class TicketService {
 	        TicketProduct ticketProduct = new TicketProduct();
 	        ticketProduct.setTicket(ticket);
 	        ticketProduct.setProduct(newProduct);
-	        ticketProduct.setProductName(dbProduct.getName());
+	        ticketProduct.setProductName(dbProduct.getProductName());
 	        ticketProduct.setQuantity(product.getQuantity());
 	        ticketProduct.setSubtotal(product.getUnitPrice() * product.getQuantity());
 	        ticketProduct.setUnitPrice(product.getUnitPrice());
