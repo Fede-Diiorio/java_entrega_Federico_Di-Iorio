@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.coderhouse.models.ProductCart;
-import com.coderhouse.dtos.CartDTO;
+import com.coderhouse.dtos.CartResDTO;
 import com.coderhouse.dtos.ProductOnCartDTO;
 import com.coderhouse.models.Cart;
 import com.coderhouse.models.Product;
@@ -37,7 +37,7 @@ public class ProductCartService {
 	}
 
 	@Transactional
-	public CartDTO addProductToCart(Long cartId, Long productId, int quantity) {
+	public CartResDTO addProductToCart(Long cartId, Long productId, int quantity) {
 
 	    if (quantity <= 0) {
 	        throw new IllegalArgumentException("Tiene que ingresar una cantidad superior a cero.");
@@ -65,7 +65,7 @@ public class ProductCartService {
 
 	    List<ProductOnCartDTO> productDTOs = getAllProductsFromCart(cartId);
 
-	    CartDTO cartDTO = new CartDTO();
+	    CartResDTO cartDTO = new CartResDTO();
 	    cartDTO.setId(cartId);
 	    cartDTO.setProducts(productDTOs);
 

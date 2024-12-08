@@ -5,8 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.coderhouse.dtos.CartDTO;
+import com.coderhouse.dtos.CartResDTO;
 import com.coderhouse.dtos.ProductOnCartDTO;
+import com.coderhouse.mapper.CartMapper;
 import com.coderhouse.models.Cart;
 import com.coderhouse.repositories.CartRepository;
 
@@ -20,16 +21,19 @@ public class CartService {
 
 	@Autowired
 	private ProductCartService productCartService;
+	
+	@Autowired
+	private CartMapper cartMapper;
 
-	public List<CartDTO> getAll() {
+	public List<CartResDTO> getAll() {
 	    return cartRepository.findAll().stream()
-	            .map(this::mapToCartDTO)
+	            .map(cartMapper::toDTO)
 	            .toList(); 
 	}
 
-	public CartDTO getById(Long id) {
+	public CartResDTO getById(Long id) {
 		Cart cart = cartRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
-		return mapToCartDTO(cart);
+		return cartMapper.toDTO(cart);
 	}
 
 	@Transactional
@@ -46,23 +50,5 @@ public class CartService {
 		return cartRepository.save(cart);
 	}
 
-	private CartDTO mapToCartDTO(Cart cart) {
-	    CartDTO cartDTO = new CartDTO();
-	    cartDTO.setId(cart.getId());
-	    cartDTO.setProducts(
-	        cart.getProducts().stream()
-	            .map(productCart -> {
-	                ProductOnCartDTO productDTO = new ProductOnCartDTO();
-	                productDTO.setId(productCart.getProduct().getId());
-	                productDTO.setName(productCart.getProduct().getName());
-	                productDTO.setUnitPrice(productCart.getProduct().getPrice());
-	                productDTO.setQuantity(productCart.getQuantity());
-	                productDTO.setTotalPrice(productCart.getQuantity() * productCart.getProduct().getPrice());
-	                return productDTO;
-	            })
-	            .toList()
-	    );
-	    return cartDTO;
-	}
 
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.coderhouse.dtos.CartDTO;
+import com.coderhouse.dtos.CartResDTO;
 import com.coderhouse.dtos.QuantityDTO;
 import com.coderhouse.dtos.TicketDTO;
 import com.coderhouse.models.Cart;
@@ -45,13 +45,13 @@ public class CartController {
 	@Operation(summary = "Mostrar todos los carritos")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Carritos encontrados con exito", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = CartDTO.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = CartResDTO.class)) }),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content)
 	})
 	@GetMapping
-	public ResponseEntity<List<CartDTO>> getAllCarts() {
+	public ResponseEntity<List<CartResDTO>> getAllCarts() {
 		try {
-			List<CartDTO> carts = cartService.getAll();
+			List<CartResDTO> carts = cartService.getAll();
 
 			return ResponseEntity.ok(carts);
 		} catch (Exception e) {
@@ -62,13 +62,13 @@ public class CartController {
 	@Operation(summary = "Econtrar carrito por ID")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Carrito encontrado con éxito", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = CartDTO.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = CartResDTO.class)) }),
 			@ApiResponse(responseCode = "404", description = "Carrito no encontrado por ID inválido", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@GetMapping("/{id}")
-	public ResponseEntity<CartDTO> getCartById(@PathVariable long id) {
+	public ResponseEntity<CartResDTO> getCartById(@PathVariable Long id) {
 		try {
-			CartDTO cart = cartService.getById(id);
+			CartResDTO cart = cartService.getById(id);
 			return ResponseEntity.ok(cart);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
@@ -80,15 +80,15 @@ public class CartController {
 	@Operation(summary = "Agrega un producto al carrito")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Producto agregado con éxito", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = CartDTO.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = CartResDTO.class)) }),
 			@ApiResponse(responseCode = "404", description = "Producto o carrito no encontrado según su ID", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@PostMapping("/{cartId}/product/{productId}")
-	public ResponseEntity<CartDTO> addProductToCart(@PathVariable long cartId, @PathVariable long productId,
+	public ResponseEntity<CartResDTO> addProductToCart(@PathVariable Long cartId, @PathVariable Long productId,
 			@RequestBody QuantityDTO quantityDTO) {
 		try {
 			int quantity = quantityDTO.getQuantity();
-			CartDTO productCart = productCartService.addProductToCart(cartId, productId, quantity);
+			CartResDTO productCart = productCartService.addProductToCart(cartId, productId, quantity);
 			return ResponseEntity.ok(productCart);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
@@ -104,7 +104,7 @@ public class CartController {
 			@ApiResponse(responseCode = "404", description = "Producto o carrito no encontrado según su ID", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@DeleteMapping("/{cartId}/product/{productId}")
-	public ResponseEntity<Void> deleteProductFromCart(@PathVariable long cartId, @PathVariable long productId) {
+	public ResponseEntity<Void> deleteProductFromCart(@PathVariable Long cartId, @PathVariable Long productId) {
 		try {
 			productCartService.deleteProductFromCart(cartId, productId);
 			return ResponseEntity.noContent().build();
@@ -122,7 +122,7 @@ public class CartController {
 			@ApiResponse(responseCode = "404", description = "Carrito no encontrado según su ID o carrito vacio", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@PostMapping("/{cartId}/ticket")
-	public ResponseEntity<TicketDTO> createTicket(@PathVariable long cartId) {
+	public ResponseEntity<TicketDTO> createTicket(@PathVariable Long cartId) {
 		try {
 			TicketDTO ticket = ticketService.saveTicket(cartId);
 			return ResponseEntity.ok(ticket);
@@ -136,14 +136,14 @@ public class CartController {
 	@Operation(summary = "Vaciar el carrito por ID")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Carrito vaciado exitosamente", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = CartDTO.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = CartResDTO.class)) }),
 			@ApiResponse(responseCode = "404", description = "Carrito no encontrado según su ID o carrito vacio", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content) })
 	@DeleteMapping("/{cartId}")
-	public ResponseEntity<CartDTO> clearCart(@PathVariable Long cartId) {
+	public ResponseEntity<CartResDTO> clearCart(@PathVariable Long cartId) {
 		try {
 			cartService.clearCart(cartId);
-			CartDTO cart = cartService.getById(cartId);
+			CartResDTO cart = cartService.getById(cartId);
 			return ResponseEntity.ok(cart);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Schema(description = "Modelo de CartDTO")
-public class CartDTO {
+public class CartResDTO {
 	
 	@Schema(description = "ID del carrito", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     private Long id;
