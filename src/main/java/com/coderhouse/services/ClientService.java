@@ -79,5 +79,13 @@ public class ClientService implements DAOInterface<ClientReqDTO, ClientResDTO> {
 		clientRepository.deleteById(id);
 
 	}
+	
+	public Client getClientByCartId(Long cartId) {
+		 Client client = clientRepository.findByCartId(cartId);
+		    if (client == null || client.getId() == 0) {
+		        throw new IllegalArgumentException("Cliente inválido para el carrito: " + cartId);
+		    }
+		    return client;
+	}
 
 }

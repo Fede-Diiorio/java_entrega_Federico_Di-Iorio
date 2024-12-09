@@ -11,12 +11,12 @@ import com.coderhouse.dtos.ProductOnCartDTO;
 import com.coderhouse.dtos.ProductResDTO;
 import com.coderhouse.dtos.TicketDTO;
 import com.coderhouse.dtos.TicketProductDTO;
+import com.coderhouse.mapper.TicketMapper;
 import com.coderhouse.models.Category;
 import com.coderhouse.models.Client;
 import com.coderhouse.models.Product;
 import com.coderhouse.models.Ticket;
 import com.coderhouse.models.TicketProduct;
-import com.coderhouse.repositories.ClientRepository;
 import com.coderhouse.repositories.TicketRepository;
 
 import jakarta.transaction.Transactional;
@@ -25,90 +25,52 @@ import jakarta.transaction.Transactional;
 public class TicketService {
 
 	@Autowired
-	private TicketRepository ticketRepository;
-	
+	private CategoryService categoryService;
+
+	@Autowired
+	private ClientService clientService;
+
+	@Autowired
+	private DateService dateService;
+
 	@Autowired
 	private ProductCartService productCartService;
-	
-	@Autowired
-	private ClientRepository clientRepository;
-	
+
 	@Autowired
 	private ProductService productService;
-	
+
 	@Autowired
 	private TicketProductService ticketProductService;
 	
 	@Autowired
-	private CategoryService categoryService;
-	
+	private TicketMapper ticketMapper;
+
 	@Autowired
-	private DateService dateService;
+	private TicketRepository ticketRepository;
 	
 	public List<TicketDTO> getAllTickets() {
 	    List<Ticket> tickets = ticketRepository.findAll();
 
-	    List<TicketDTO> ticketsDTO = tickets.stream().map(ticket -> {
-	        List<TicketProduct> ticketProducts = ticketProductService.getAllByTicketId(ticket.getId());
-
-	        TicketDTO dto = new TicketDTO();
-	        dto.setId(ticket.getId());
-	        dto.setClientId(ticket.getClient().getId());
-	        dto.setCode(ticket.getCode());
-	        dto.setCreatedAt(ticket.getCreatedAt());
-	        dto.setTotal(ticket.getTotal());
-
-	        List<TicketProductDTO> productDTOs = ticketProducts.stream()
-	            .map(product -> {
-	                TicketProductDTO productDTO = new TicketProductDTO();
-	                productDTO.setProductName(product.getProductName());
-	                productDTO.setProductId(product.getProduct().getId());
-	                productDTO.setProductPrice(product.getUnitPrice());
-	                productDTO.setQuantity(product.getQuantity());
-	                productDTO.setSubtotal(product.getSubtotal());
-	                return productDTO;
-	            })
-	            .toList();
-
-	        dto.setProducts(productDTOs);
-
-	        return dto;
-	    }).toList();
-
-	    return ticketsDTO;
+	    return tickets.stream()
+	        .map(ticket -> {
+	            List<TicketProduct> ticketProducts = ticketProductService.getAllByTicketId(ticket.getId());
+	            
+	            return ticketMapper.toDTO(ticket, ticketProducts);
+	        })
+	        .toList();
 	}
+
 
 	public List<TicketDTO> getAllTicketsByClient(Long clientId) {
 	    List<Ticket> tickets = ticketRepository.findByClientId(clientId);
 
-	    List<TicketDTO> ticketsDTO = tickets.stream().map(ticket -> {
-	        List<TicketProduct> ticketProducts = ticketProductService.getAllByTicketId(ticket.getId());
-
-	        TicketDTO dto = new TicketDTO();
-	        dto.setId(ticket.getId());
-	        dto.setClientId(ticket.getClient().getId());
-	        dto.setCode(ticket.getCode());
-	        dto.setCreatedAt(ticket.getCreatedAt());
-	        dto.setTotal(ticket.getTotal());
-	        
-	        List<TicketProductDTO> productDTOs = ticketProducts.stream()
-	            .map(product -> {
-	                TicketProductDTO productDTO = new TicketProductDTO();
-	                productDTO.setProductName(product.getProductName());
-	                productDTO.setProductId(product.getProduct().getId());
-	                productDTO.setProductPrice(product.getUnitPrice());
-	                productDTO.setQuantity(product.getQuantity());
-	                productDTO.setSubtotal(product.getSubtotal());
-	                return productDTO;
-	            })
-	            .toList();
-
-	        dto.setProducts(productDTOs);
-
-	        return dto;
-	    }).toList();
-
-	    return ticketsDTO;
+	    return tickets.stream()
+		        .map(ticket -> {
+		            List<TicketProduct> ticketProducts = ticketProductService.getAllByTicketId(ticket.getId());
+		            
+		            return ticketMapper.toDTO(ticket, ticketProducts);
+		        })
+		        .toList();
 	}
 
 	public TicketDTO getTicketById(Long ticketId) {
@@ -117,34 +79,13 @@ public class TicketService {
 
 	    List<TicketProduct> ticketProducts = ticketProductService.getAllByTicketId(ticketId);
 
-	    TicketDTO dto = new TicketDTO();
-	    dto.setId(ticket.getId());
-	    dto.setClientId(ticket.getClient().getId());
-	    dto.setCode(ticket.getCode());
-	    dto.setCreatedAt(ticket.getCreatedAt());
-	    dto.setTotal(ticket.getTotal());
-
-	    List<TicketProductDTO> productDTOs = ticketProducts.stream()
-	        .map(product -> {
-	            TicketProductDTO productDTO = new TicketProductDTO();
-	            productDTO.setProductName(product.getProductName());
-	            productDTO.setProductId(product.getProduct().getId());
-	            productDTO.setProductPrice(product.getUnitPrice());
-	            productDTO.setQuantity(product.getQuantity());
-	            productDTO.setSubtotal(product.getSubtotal());
-	            return productDTO;
-	        })
-	        .toList();
-
-	    dto.setProducts(productDTOs);
-
-	    return dto;
+	    return ticketMapper.toDTO(ticket, ticketProducts);
 	}
 
 	
 	@Transactional
 	public TicketDTO saveTicket(Long cartId) {
-	    Client client = validateClient(cartId);
+	    Client client = clientService.getClientByCartId(cartId);
 
 	    List<ProductOnCartDTO> products = productCartService.getAllProductsFromCart(cartId);
 	    if (products.isEmpty()) {
@@ -160,15 +101,6 @@ public class TicketService {
 	    productCartService.deleteProductCartByCartId(cartId);
 
 	    return convertToTicketDTO(ticket, products);
-	}
-
-	
-	private Client validateClient(Long cartId) {
-	    Client client = clientRepository.findByCartId(cartId);
-	    if (client == null || client.getId() == 0) {
-	        throw new IllegalArgumentException("Cliente inválido para el carrito: " + cartId);
-	    }
-	    return client;
 	}
 
 	private Ticket createTicket(Client client, List<ProductOnCartDTO> products) {

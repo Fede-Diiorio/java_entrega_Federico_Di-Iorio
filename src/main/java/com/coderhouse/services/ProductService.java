@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.coderhouse.dtos.ProductReqDTO;
 import com.coderhouse.dtos.ProductResDTO;
+import com.coderhouse.interfaces.DAOInterface;
 import com.coderhouse.mapper.ProductMapper;
 import com.coderhouse.models.Product;
 import com.coderhouse.repositories.ProductRepository;
@@ -14,7 +15,7 @@ import com.coderhouse.repositories.ProductRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-public class ProductService {
+public class ProductService implements DAOInterface<ProductReqDTO, ProductResDTO>{
 
 	@Autowired
 	private ProductRepository productRepository;
@@ -22,6 +23,7 @@ public class ProductService {
 	@Autowired
 	private ProductMapper productMapper;
 
+	@Override
 	public List<ProductResDTO> getAll() {
 		List<Product> products = productRepository.findAll();
 		return products.stream().map(productMapper::toDTO).toList();
@@ -32,11 +34,13 @@ public class ProductService {
 				.orElseThrow(() -> new IllegalArgumentException("Producto con ID " + id + " no encontrado."));
 	}
 
+	@Override
 	public ProductResDTO getById(Long id) {
 		Product product = getProductById(id);
 		return productMapper.toDTO(product);
 	}
 
+	@Override
 	@Transactional
 	public ProductResDTO save(ProductReqDTO productDTO) {
 		validateMandatoryFields(productDTO);
@@ -49,6 +53,7 @@ public class ProductService {
 
 	}
 
+	@Override
 	@Transactional
 	public ProductResDTO update(Long id, ProductReqDTO productDTO) {
 		Product product = getProductById(id);
@@ -60,6 +65,7 @@ public class ProductService {
 		return productMapper.toDTO(product);
 	}
 
+	@Override
 	@Transactional
 	public void delete(Long id) {
 		if (!productRepository.existsById(id)) {
