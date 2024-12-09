@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import com.coderhouse.models.ProductCart;
 import com.coderhouse.dtos.CartResDTO;
 import com.coderhouse.dtos.ProductOnCartDTO;
+import com.coderhouse.mapper.CartMapper;
+import com.coderhouse.mapper.ProductCartMapper;
 import com.coderhouse.models.Cart;
 import com.coderhouse.models.Product;
-import com.coderhouse.repositories.CartRepository;
 import com.coderhouse.repositories.ProductCartRepository;
-import com.coderhouse.repositories.ProductRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -24,61 +24,54 @@ public class ProductCartService {
 	private ProductCartRepository productCartRepository;
 
 	@Autowired
-	private CartRepository cartRepository;
+	private ProductService productService;
 
 	@Autowired
-	private ProductRepository productRepository;
+	private CartService cartService;
 
+	@Autowired
+	private CartMapper cartMapper;
+
+	@Autowired
+	private ProductCartMapper productCartMapper;
+	
 	public List<ProductOnCartDTO> getAllProductsFromCart(Long cartId) {
-	    List<ProductCart> productCarts = productCartRepository.findByCartId(cartId);
-	    return productCarts.stream()
-	            .map(this::mapToProductOnCartDTO)
-	            .toList();
+		List<ProductCart> productCarts = productCartRepository.findByCartId(cartId);
+		return productCarts.stream().map(productCartMapper::toDTO).toList();
 	}
 
 	@Transactional
 	public CartResDTO addProductToCart(Long cartId, Long productId, int quantity) {
 
-	    if (quantity <= 0) {
-	        throw new IllegalArgumentException("Tiene que ingresar una cantidad superior a cero.");
-	    }
+		if (quantity <= 0) {
+			throw new IllegalArgumentException("Tiene que ingresar una cantidad superior a cero.");
+		}
 
-	    Cart cart = cartRepository.findById(cartId)
-	            .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
+		Cart cart = cartService.getCartById(cartId);
 
-	    Product product = productRepository.findById(productId)
-	            .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
+		Product product = productService.getProductById(productId);
 
-	    Optional<ProductCart> existingProductCart = productCartRepository.findByCartAndProduct(cart, product);
+		Optional<ProductCart> existingProductCart = productCartRepository.findByCartAndProduct(cart, product);
 
-	    if (existingProductCart.isPresent()) {
-	        ProductCart productCart = existingProductCart.get();
-	        productCart.setQuantity(quantity);
-	        productCartRepository.save(productCart);
-	    } else {
-	        ProductCart newProductCart = new ProductCart();
-	        newProductCart.setQuantity(quantity);
-	        newProductCart.setCart(cart);
-	        newProductCart.setProduct(product);
-	        productCartRepository.save(newProductCart);
-	    }
+		if (existingProductCart.isPresent()) {
+			ProductCart productCart = existingProductCart.get();
+			productCart.setQuantity(quantity);
+			productCartRepository.save(productCart);
+		} else {
+			ProductCart newProductCart = new ProductCart();
+			newProductCart.setQuantity(quantity);
+			newProductCart.setCart(cart);
+			newProductCart.setProduct(product);
+			productCartRepository.save(newProductCart);
+		}
 
-	    List<ProductOnCartDTO> productDTOs = getAllProductsFromCart(cartId);
-
-	    CartResDTO cartDTO = new CartResDTO();
-	    cartDTO.setId(cartId);
-	    cartDTO.setProducts(productDTOs);
-
-	    return cartDTO;
+		return cartMapper.toDTO(cart);
 	}
 
-
 	public void deleteProductFromCart(Long cartId, Long productId) {
-		Cart cart = cartRepository.findById(cartId)
-				.orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
+		Cart cart = cartService.getCartById(cartId);
 
-		Product product = productRepository.findById(productId)
-				.orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
+		Product product = productService.getProductById(productId);
 
 		Optional<ProductCart> existingProductCart = productCartRepository.findByCartAndProduct(cart, product);
 
@@ -90,18 +83,15 @@ public class ProductCartService {
 		}
 	}
 
+	@Transactional
 	public void deleteProductCartByCartId(long cartId) {
 		productCartRepository.deleteByCartId(cartId);
 	}
 	
-	private ProductOnCartDTO mapToProductOnCartDTO(ProductCart productCart) {
-	    ProductOnCartDTO dto = new ProductOnCartDTO();
-	    dto.setId(productCart.getProduct().getId());
-	    dto.setName(productCart.getProduct().getName());
-	    dto.setUnitPrice(productCart.getProduct().getPrice());
-	    dto.setQuantity(productCart.getQuantity());
-	    dto.setTotalPrice(productCart.getQuantity() * productCart.getProduct().getPrice());
-	    return dto;
+	public CartResDTO clearCart(Long cartId) {
+		cartService.getCartById(cartId);
+		productCartRepository.deleteByCartId(cartId);
+	    return cartService.getById(cartId);
 	}
 
 

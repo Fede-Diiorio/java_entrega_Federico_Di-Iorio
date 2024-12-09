@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 
 import com.coderhouse.models.Cart;
 import com.coderhouse.models.Product;
@@ -22,6 +23,8 @@ public interface ProductCartRepository extends JpaRepository<ProductCart, Long> 
 	@Transactional
 	@Modifying
 	@Query("DELETE FROM ProductCart pc WHERE pc.cart.id = :cartId")
-	void deleteByCartId(long cartId);
+	void deleteByCartId(@Param("cartId") long cartId);
+
+
 
 }

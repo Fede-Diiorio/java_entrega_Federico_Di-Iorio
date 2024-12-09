@@ -142,8 +142,7 @@ public class CartController {
 	@DeleteMapping("/{cartId}")
 	public ResponseEntity<CartResDTO> clearCart(@PathVariable Long cartId) {
 		try {
-			cartService.clearCart(cartId);
-			CartResDTO cart = cartService.getById(cartId);
+			CartResDTO cart =  productCartService.clearCart(cartId);
 			return ResponseEntity.ok(cart);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
