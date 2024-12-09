@@ -13,10 +13,10 @@ import lombok.Setter;
 public class ProductOnCartDTO {
 	
 	@Schema(description = "ID del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
-	private Long id;
+	private Long productId;
 	
 	@Schema(description = "Nombre del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "Remera de Gryffindor")
-	private String name;
+	private String productName;
 	
 	@Schema(description = "Precio del producto", requiredMode = Schema.RequiredMode.REQUIRED, example = "10")
 	private double unitPrice;

@@ -1,7 +1,6 @@
 package com.coderhouse.services;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,9 +9,8 @@ import com.coderhouse.dtos.ProductReqDTO;
 import com.coderhouse.dtos.ProductOnCartDTO;
 import com.coderhouse.dtos.ProductResDTO;
 import com.coderhouse.dtos.TicketDTO;
-import com.coderhouse.dtos.TicketProductDTO;
+import com.coderhouse.mapper.ProductMapper;
 import com.coderhouse.mapper.TicketMapper;
-import com.coderhouse.models.Category;
 import com.coderhouse.models.Client;
 import com.coderhouse.models.Product;
 import com.coderhouse.models.Ticket;
@@ -25,9 +23,6 @@ import jakarta.transaction.Transactional;
 public class TicketService {
 
 	@Autowired
-	private CategoryService categoryService;
-
-	@Autowired
 	private ClientService clientService;
 
 	@Autowired
@@ -38,6 +33,9 @@ public class TicketService {
 
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private ProductMapper productMapper;
 
 	@Autowired
 	private TicketProductService ticketProductService;
@@ -100,7 +98,7 @@ public class TicketService {
 
 	    productCartService.deleteProductCartByCartId(cartId);
 
-	    return convertToTicketDTO(ticket, products);
+	    return ticketMapper.ToTicketDTO(ticket, products);
 	}
 
 	private Ticket createTicket(Client client, List<ProductOnCartDTO> products) {
@@ -115,23 +113,15 @@ public class TicketService {
 	    ticket.setTotal(total);
 	    return ticketRepository.save(ticket);
 	}
-
+	
 	private void updateProductStock(List<ProductOnCartDTO> products) {
 	    for (ProductOnCartDTO productCart : products) {
-	        ProductResDTO product = productService.getById(productCart.getId());
+	    	
+	        ProductResDTO product = productService.getById(productCart.getProductId());
 	        
-	        Category category = categoryService.getByName(product.getCategoryName());
+	        ProductReqDTO productDTO = productMapper.toReqDTO(product);
 	        
-	        ProductReqDTO productDTO = new ProductReqDTO();
-	        productDTO.setProductId(product.getProductId());
-	        productDTO.setProductName(product.getProductName());
-	        productDTO.setProductImage(product.getProductImage());
-	        productDTO.setProductDescription(product.getProductDescription());
 	        productDTO.setProductStock(product.getProductStock() - productCart.getQuantity());
-	        productDTO.setProductPrice(product.getProductPrice());
-	        if (product.getCategoryName() != null) {
-	            productDTO.setCategoryId(category.getId());
-	        }
 
 	        productService.update(productDTO.getProductId(), productDTO);
 	    }
@@ -139,8 +129,8 @@ public class TicketService {
 
 	private void saveTicketProducts(Ticket ticket, List<ProductOnCartDTO> products) {
 	    for (ProductOnCartDTO product : products) {
-	        ProductResDTO dbProduct = productService.getById(product.getId());
-	        Product newProduct = productService.getProductById(product.getId());
+	        ProductResDTO dbProduct = productService.getById(product.getProductId());
+	        Product newProduct = productService.getProductById(product.getProductId());
 
 	        TicketProduct ticketProduct = new TicketProduct();
 	        ticketProduct.setTicket(ticket);
@@ -152,28 +142,6 @@ public class TicketService {
 
 	        ticketProductService.save(ticketProduct);
 	    }
-	}
-
-	private TicketDTO convertToTicketDTO(Ticket ticket, List<ProductOnCartDTO> products) {
-	    TicketDTO ticketDTO = new TicketDTO();
-	    ticketDTO.setId(ticket.getId());
-	    ticketDTO.setClientId(ticket.getClient().getId());
-	    ticketDTO.setCreatedAt(ticket.getCreatedAt());
-	    ticketDTO.setCode(ticket.getCode());
-	    ticketDTO.setTotal(ticket.getTotal());
-
-	    List<TicketProductDTO> productDTOs = products.stream().map(product -> {
-	        TicketProductDTO dto = new TicketProductDTO();
-	        dto.setProductId(product.getId());
-	        dto.setProductName(product.getName());
-	        dto.setQuantity(product.getQuantity());
-	        dto.setProductPrice(product.getUnitPrice());
-	        dto.setSubtotal(product.getUnitPrice() * product.getQuantity());
-	        return dto;
-	    }).collect(Collectors.toList());
-
-	    ticketDTO.setProducts(productDTOs);
-	    return ticketDTO;
 	}
 
 }

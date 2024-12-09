@@ -16,8 +16,8 @@ public class CartMapper {
 		        cart.getProducts().stream()
 		            .map(productCart -> {
 		                ProductOnCartDTO productDTO = new ProductOnCartDTO();
-		                productDTO.setId(productCart.getProduct().getId());
-		                productDTO.setName(productCart.getProduct().getName());
+		                productDTO.setProductId(productCart.getProduct().getId());
+		                productDTO.setProductName(productCart.getProduct().getName());
 		                productDTO.setUnitPrice(productCart.getProduct().getPrice());
 		                productDTO.setQuantity(productCart.getQuantity());
 		                productDTO.setTotalPrice(productCart.getQuantity() * productCart.getProduct().getPrice());

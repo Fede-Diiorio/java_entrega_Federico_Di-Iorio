@@ -10,8 +10,8 @@ public class ProductCartMapper {
 
 	public ProductOnCartDTO toDTO(ProductCart productCart) {
 	    ProductOnCartDTO dto = new ProductOnCartDTO();
-	    dto.setId(productCart.getProduct().getId());
-	    dto.setName(productCart.getProduct().getName());
+	    dto.setProductId(productCart.getProduct().getId());
+	    dto.setProductName(productCart.getProduct().getName());
 	    dto.setUnitPrice(productCart.getProduct().getPrice());
 	    dto.setQuantity(productCart.getQuantity());
 	    dto.setTotalPrice(productCart.getQuantity() * productCart.getProduct().getPrice());

@@ -61,4 +61,21 @@ public class ProductMapper {
 		return product;
 	}
 
+	public ProductReqDTO toReqDTO(ProductResDTO product) {
+		
+		Category category = categoryService.getByName(product.getCategoryName());
+		
+		ProductReqDTO productDTO = new ProductReqDTO();
+        productDTO.setProductId(product.getProductId());
+        productDTO.setProductName(product.getProductName());
+        productDTO.setProductImage(product.getProductImage());
+        productDTO.setProductDescription(product.getProductDescription());
+        productDTO.setProductStock(product.getProductStock());
+        productDTO.setProductPrice(product.getProductPrice());
+        if (product.getCategoryName() != null) {
+            productDTO.setCategoryId(category.getId());
+        }
+        
+        return productDTO;
+	}
 }
